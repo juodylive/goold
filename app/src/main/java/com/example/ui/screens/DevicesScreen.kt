@@ -123,7 +123,7 @@ fun DevicesScreen(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         Text(
-            text = AppStrings.devicesScreenTitle(isAr),
+            text = AppStrings.devicesScreenTitle(appLanguage),
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = TextPrimary
@@ -159,7 +159,7 @@ fun DevicesScreen(
                         Spacer(modifier = Modifier.width(10.dp))
                         Column {
                             Text(
-                                text = AppStrings.phoneSensorTitle(isAr),
+                                text = AppStrings.phoneSensorTitle(appLanguage),
                                 style = MaterialTheme.typography.titleMedium.copy(
                                     fontWeight = FontWeight.Bold,
                                     color = TextPrimary
@@ -174,7 +174,7 @@ fun DevicesScreen(
 
                     if (isPhoneActive) {
                         Text(
-                            text = AppStrings.activeBadge(isAr),
+                            text = AppStrings.activeBadge(appLanguage),
                             style = MaterialTheme.typography.labelMedium.copy(
                                 color = AmberRadar,
                                 fontWeight = FontWeight.Bold
@@ -189,7 +189,7 @@ fun DevicesScreen(
                             colors = ButtonDefaults.buttonColors(containerColor = DetectorSurfaceBorder, contentColor = TextPrimary),
                             modifier = Modifier.height(34.dp).testTag("select_phone_sensor_btn")
                         ) {
-                            Text(AppStrings.selectBtn(isAr), fontSize = 12.sp)
+                            Text(AppStrings.selectBtn(appLanguage), fontSize = 12.sp)
                         }
                     }
                 }
@@ -236,7 +236,7 @@ fun DevicesScreen(
                         Spacer(modifier = Modifier.width(10.dp))
                         Column {
                             Text(
-                                text = AppStrings.bleSensorTitle(isAr),
+                                text = AppStrings.bleSensorTitle(appLanguage),
                                 style = MaterialTheme.typography.titleMedium.copy(
                                     fontWeight = FontWeight.Bold,
                                     color = TextPrimary
@@ -251,7 +251,7 @@ fun DevicesScreen(
 
                     if (isBleActive) {
                         Text(
-                            text = AppStrings.activeBadge(isAr),
+                            text = AppStrings.activeBadge(appLanguage),
                             style = MaterialTheme.typography.labelMedium.copy(
                                 color = CyanGlow,
                                 fontWeight = FontWeight.Bold
@@ -266,7 +266,7 @@ fun DevicesScreen(
                             colors = ButtonDefaults.buttonColors(containerColor = DetectorSurfaceBorder, contentColor = TextPrimary),
                             modifier = Modifier.height(34.dp).testTag("select_ble_sensor_btn")
                         ) {
-                            Text(AppStrings.selectBtn(isAr), fontSize = 12.sp)
+                            Text(AppStrings.selectBtn(appLanguage), fontSize = 12.sp)
                         }
                     }
                 }
@@ -313,14 +313,14 @@ fun DevicesScreen(
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(6.dp))
-                        Text(text = if (isBleScanning) (if (isAr) "إيقاف البحث" else "Stop Scan") else AppStrings.bleScanBtn(isAr), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Text(text = if (isBleScanning) AppStrings.bleStopScanBtn(appLanguage) else AppStrings.bleScanBtn(appLanguage), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 }
 
                 // Discovered BLE Devices List
                 if (bleDevices.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = if (isAr) "الأجهزة المكتشفة" else "DISCOVERED DEVICES", fontSize = 10.sp, color = TextSecondary, letterSpacing = 1.sp)
+                    Text(text = AppStrings.discoveredDevices(appLanguage), fontSize = 10.sp, color = TextSecondary, letterSpacing = 1.sp)
                     Spacer(modifier = Modifier.height(6.dp))
 
                     bleDevices.forEach { dev ->
@@ -349,7 +349,7 @@ fun DevicesScreen(
                                 ),
                                 modifier = Modifier.height(32.dp)
                             ) {
-                                Text(if (isThisConnected) (if (isAr) "متصل" else "Connected") else (if (isAr) "اتصال" else "Connect"), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                Text(if (isThisConnected) AppStrings.connected(appLanguage) else AppStrings.connect(appLanguage), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                             }
                         }
                         Spacer(modifier = Modifier.height(6.dp))
@@ -387,7 +387,7 @@ fun DevicesScreen(
                         Spacer(modifier = Modifier.width(10.dp))
                         Column {
                             Text(
-                                text = AppStrings.usbSensorTitle(isAr),
+                                text = AppStrings.usbSensorTitle(appLanguage),
                                 style = MaterialTheme.typography.titleMedium.copy(
                                     fontWeight = FontWeight.Bold,
                                     color = TextPrimary
@@ -402,7 +402,7 @@ fun DevicesScreen(
 
                     if (isUsbActive) {
                         Text(
-                            text = AppStrings.activeBadge(isAr),
+                            text = AppStrings.activeBadge(appLanguage),
                             style = MaterialTheme.typography.labelMedium.copy(
                                 color = EmeraldSignal,
                                 fontWeight = FontWeight.Bold
@@ -417,7 +417,7 @@ fun DevicesScreen(
                             colors = ButtonDefaults.buttonColors(containerColor = DetectorSurfaceBorder, contentColor = TextPrimary),
                             modifier = Modifier.height(34.dp).testTag("select_usb_sensor_btn")
                         ) {
-                            Text(AppStrings.selectBtn(isAr), fontSize = 12.sp)
+                            Text(AppStrings.selectBtn(appLanguage), fontSize = 12.sp)
                         }
                     }
                 }
@@ -427,7 +427,7 @@ fun DevicesScreen(
                 val usbList = usbSensor.getAvailableUsbDevices()
                 if (usbList.isEmpty()) {
                     Text(
-                        text = if (isAr) "قم بتوصيل كابل USB OTG لمستشعر المعادن للتعرف على الجهاز تلقائياً." else "Plug in a USB OTG serial metal detector cable to auto-detect hardware.",
+                        text = AppStrings.plugUsbHint(appLanguage),
                         style = MaterialTheme.typography.bodySmall.copy(color = TextSecondary)
                     )
                 } else {
@@ -452,7 +452,7 @@ fun DevicesScreen(
                                 colors = ButtonDefaults.buttonColors(containerColor = EmeraldSignal, contentColor = DetectorDarkBg),
                                 modifier = Modifier.height(32.dp)
                             ) {
-                                Text(if (isAr) "فتح USB" else "Open USB", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                Text(AppStrings.openUsb(appLanguage), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -489,14 +489,14 @@ fun DevicesScreen(
                         Spacer(modifier = Modifier.width(10.dp))
                         Column {
                             Text(
-                                text = AppStrings.simSensorTitle(isAr),
+                                text = AppStrings.simSensorTitle(appLanguage),
                                 style = MaterialTheme.typography.titleMedium.copy(
                                     fontWeight = FontWeight.Bold,
                                     color = TextPrimary
                                 )
                             )
                             Text(
-                                text = if (isAr) "توليد إشارات اصطناعية لاختبار الخوارزميات بدون هاردوير" else "Generates synthetic signals for testing",
+                                text = AppStrings.simDesc(appLanguage),
                                 style = MaterialTheme.typography.bodySmall.copy(color = TextSecondary)
                             )
                         }
@@ -528,7 +528,7 @@ fun DevicesScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = if (isAr) "محاكاة هوية الهدف VDI الخارجية" else "Simulate External Hardware VDI (Target ID)",
+                            text = AppStrings.simVdiToggle(appLanguage),
                             style = MaterialTheme.typography.bodyMedium.copy(color = TextPrimary)
                         )
                         Switch(

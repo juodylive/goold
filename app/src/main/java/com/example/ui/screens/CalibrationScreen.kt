@@ -96,7 +96,7 @@ fun CalibrationScreen(
     ) {
         // Header
         Text(
-            text = AppStrings.calibScreenTitle(isAr),
+            text = AppStrings.calibScreenTitle(appLanguage),
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = TextPrimary
@@ -123,7 +123,7 @@ fun CalibrationScreen(
                 )
 
                 Text(
-                    text = AppStrings.calibMotionGuide(isAr),
+                    text = AppStrings.calibMotionGuide(appLanguage),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         color = AmberRadar
@@ -133,7 +133,7 @@ fun CalibrationScreen(
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = AppStrings.calibMotionDesc(isAr),
+                    text = AppStrings.calibMotionDesc(appLanguage),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = TextSecondary,
                         lineHeight = 20.sp
@@ -157,9 +157,9 @@ fun CalibrationScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 val localizedStatus = when (currentStep) {
-                    CalibrationStep.IDLE -> if (isAr) "جاهز لبدء المعايرة" else "Ready to Calibrate"
-                    CalibrationStep.COMPLETED -> AppStrings.calibComplete(isAr)
-                    else -> AppStrings.calibProgress(isAr) + " (${(progressPct * 100).toInt()}%)"
+                    CalibrationStep.IDLE -> AppStrings.calibReady(appLanguage)
+                    CalibrationStep.COMPLETED -> AppStrings.calibComplete(appLanguage)
+                    else -> AppStrings.calibProgress(appLanguage) + " (${(progressPct * 100).toInt()}%)"
                 }
 
                 Text(
@@ -197,7 +197,7 @@ fun CalibrationScreen(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = if (currentStep == CalibrationStep.COMPLETED) (if (isAr) "إعادة معايرة المستشعر" else "RE-CALIBRATE SENSOR") else (if (isAr) "بدء المعايرة الذاتية" else "START GUIDED CALIBRATION"),
+                        text = if (currentStep == CalibrationStep.COMPLETED) AppStrings.calibReCalibrate(appLanguage) else AppStrings.calibStartGuided(appLanguage),
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.sp
                     )
@@ -214,21 +214,21 @@ fun CalibrationScreen(
         ) {
             Column(modifier = Modifier.padding(14.dp)) {
                 Text(
-                    text = AppStrings.calibActiveProcess(isAr),
+                    text = AppStrings.calibActiveProcess(appLanguage),
                     style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary, letterSpacing = 1.sp)
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
                 val steps = listOf(
-                    AppStrings.calibStep1(isAr),
-                    AppStrings.calibStep2(isAr),
-                    AppStrings.calibStep3(isAr),
-                    AppStrings.calibStep4(isAr),
-                    AppStrings.calibStep5(isAr),
-                    AppStrings.calibStep6(isAr),
-                    AppStrings.calibStep7(isAr),
-                    AppStrings.calibStep8(isAr),
-                    AppStrings.calibStep9(isAr)
+                    AppStrings.calibStep1(appLanguage),
+                    AppStrings.calibStep2(appLanguage),
+                    AppStrings.calibStep3(appLanguage),
+                    AppStrings.calibStep4(appLanguage),
+                    AppStrings.calibStep5(appLanguage),
+                    AppStrings.calibStep6(appLanguage),
+                    AppStrings.calibStep7(appLanguage),
+                    AppStrings.calibStep8(appLanguage),
+                    AppStrings.calibStep9(appLanguage)
                 )
 
                 steps.forEachIndexed { index, stepName ->
@@ -274,7 +274,7 @@ fun CalibrationScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = if (isAr) "تقرير المعايرة" else "CALIBRATION REPORT",
+                            text = AppStrings.calibReportTitle(appLanguage),
                             style = MaterialTheme.typography.labelSmall.copy(color = EmeraldSignal, letterSpacing = 1.sp)
                         )
                         val qualityBadgeColor = when (res.quality) {
@@ -283,9 +283,9 @@ fun CalibrationScreen(
                             CalibrationQuality.POOR -> CrimsonAlert
                         }
                         val qualityName = when (res.quality) {
-                            CalibrationQuality.EXCELLENT -> if (isAr) "ممتاز" else "EXCELLENT"
-                            CalibrationQuality.GOOD -> if (isAr) "جيد" else "GOOD"
-                            CalibrationQuality.POOR -> if (isAr) "ضعيف" else "POOR"
+                            CalibrationQuality.EXCELLENT -> AppStrings.calibQualityExcellentShort(appLanguage)
+                            CalibrationQuality.GOOD -> AppStrings.calibQualityGoodShort(appLanguage)
+                            CalibrationQuality.POOR -> AppStrings.calibQualityPoorShort(appLanguage)
                         }
                         Text(
                             text = qualityName,
@@ -306,15 +306,15 @@ fun CalibrationScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
-                            Text(if (isAr) "خط الأساس" else "Calibrated Baseline", fontSize = 11.sp, color = TextSecondary)
+                            Text(AppStrings.calibBaseline(appLanguage), fontSize = 11.sp, color = TextSecondary)
                             Text("${String.format(Locale.US, "%.1f", res.baselineUt)} µT", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary, fontFamily = FontFamily.Monospace)
                         }
                         Column {
-                            Text(if (isAr) "مستوى الضوضاء (σ)" else "Noise Floor (σ)", fontSize = 11.sp, color = TextSecondary)
+                            Text(AppStrings.calibNoiseFloor(appLanguage), fontSize = 11.sp, color = TextSecondary)
                             Text("±${String.format(Locale.US, "%.2f", res.noiseFloorUt)} µT", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = CyanGlow, fontFamily = FontFamily.Monospace)
                         }
                         Column {
-                            Text(if (isAr) "عتبة التنبيه" else "Trigger Threshold", fontSize = 11.sp, color = TextSecondary)
+                            Text(AppStrings.calibThreshold(appLanguage), fontSize = 11.sp, color = TextSecondary)
                             Text("${String.format(Locale.US, "%.1f", res.recommendedThresholdUt)} µT", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = AmberRadar, fontFamily = FontFamily.Monospace)
                         }
                     }
@@ -335,7 +335,7 @@ fun CalibrationScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = if (isAr) "ضبط الحساسية اليدوية" else "MANUAL SENSITIVITY ADJUSTMENT",
+                        text = AppStrings.calibManualSensitivity(appLanguage),
                         style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
                     )
                     Text(
@@ -361,7 +361,7 @@ fun CalibrationScreen(
                 )
 
                 Text(
-                    text = if (isAr) "الحساسية العالية ترصد الأهداف الصغيرة والبعيدة، لكن قد تتأثر بحركة اليد السريعة." else "Higher sensitivity detects smaller anomalies but may increase sensitivity to device movement.",
+                    text = AppStrings.calibSensitivityHint(appLanguage),
                     style = MaterialTheme.typography.bodySmall.copy(color = TextSecondary)
                 )
             }

@@ -92,14 +92,14 @@ fun HistoryScreen(
         ) {
             Column {
                 Text(
-                    text = AppStrings.historyScreenTitle(isAr),
+                    text = AppStrings.historyScreenTitle(appLanguage),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
                         color = TextPrimary
                     )
                 )
                 Text(
-                    text = if (isAr) "${logs.size} حدث كشف مسجل" else "${logs.size} recorded detection events",
+                    text = AppStrings.recordedLogsCount(logs.size, appLanguage),
                     style = MaterialTheme.typography.bodySmall.copy(color = TextSecondary)
                 )
             }
@@ -111,7 +111,7 @@ fun HistoryScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.DeleteSweep,
-                        contentDescription = AppStrings.clearAllHistory(isAr),
+                        contentDescription = AppStrings.clearAllHistory(appLanguage),
                         tint = CrimsonAlert
                     )
                 }
@@ -136,12 +136,12 @@ fun HistoryScreen(
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = AppStrings.noLogsTitle(isAr),
+                        text = AppStrings.noLogsTitle(appLanguage),
                         style = MaterialTheme.typography.titleMedium.copy(color = TextPrimary)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = AppStrings.noLogsDesc(isAr),
+                        text = AppStrings.noLogsDesc(appLanguage),
                         style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary),
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
@@ -155,7 +155,7 @@ fun HistoryScreen(
                 items(logs, key = { it.id }) { log ->
                     ScanLogCard(
                         log = log,
-                        isArabic = isAr,
+                        appLanguage = appLanguage,
                         onDelete = { viewModel.deleteLog(log.id) },
                         onOpenMap = { lat, lon ->
                             val uri = Uri.parse("geo:$lat,$lon?q=$lat,$lon(MetalScan+Detection)")
@@ -171,8 +171,8 @@ fun HistoryScreen(
     if (showClearConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showClearConfirmDialog = false },
-            title = { Text(AppStrings.clearAllHistory(isAr), color = TextPrimary) },
-            text = { Text(AppStrings.clearAllConfirm(isAr), color = TextSecondary) },
+            title = { Text(AppStrings.clearAllHistory(appLanguage), color = TextPrimary) },
+            text = { Text(AppStrings.clearAllConfirm(appLanguage), color = TextSecondary) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -181,12 +181,12 @@ fun HistoryScreen(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = CrimsonAlert)
                 ) {
-                    Text(if (isAr) "مسح الكل" else "Delete All", fontWeight = FontWeight.Bold)
+                    Text(AppStrings.deleteAll(appLanguage), fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showClearConfirmDialog = false }) {
-                    Text(AppStrings.cancel(isAr), color = TextSecondary)
+                    Text(AppStrings.cancel(appLanguage), color = TextSecondary)
                 }
             },
             containerColor = DetectorSurfaceCard
@@ -197,7 +197,7 @@ fun HistoryScreen(
 @Composable
 fun ScanLogCard(
     log: ScanLogEntity,
-    isArabic: Boolean = true,
+    appLanguage: String = "ar",
     onDelete: () -> Unit,
     onOpenMap: (Double, Double) -> Unit,
     modifier: Modifier = Modifier
@@ -324,7 +324,7 @@ fun ScanLogCard(
                         onClick = { onOpenMap(log.latitude, log.longitude) },
                         contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)
                     ) {
-                        Text(AppStrings.viewMap(isArabic), fontSize = 11.sp, color = EmeraldSignal)
+                        Text(AppStrings.viewMap(appLanguage), fontSize = 11.sp, color = EmeraldSignal)
                     }
                 }
             }

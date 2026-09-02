@@ -56,7 +56,8 @@ import kotlin.math.sin
 fun CircularDetectorMeter(
     signal: ProcessedSignal,
     isDetecting: Boolean,
-    isArabic: Boolean = true,
+    appLanguage: String = "ar",
+    isArabic: Boolean = (appLanguage == "ar"),
     modifier: Modifier = Modifier
 ) {
     // Smooth meter animated angle

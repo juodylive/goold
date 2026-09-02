@@ -46,7 +46,8 @@ import com.example.ui.theme.TextSecondary
 @Composable
 fun TargetClassificationBadge(
     classification: TargetClassification,
-    isArabic: Boolean = true,
+    appLanguage: String = "ar",
+    isArabic: Boolean = (appLanguage == "ar"),
     modifier: Modifier = Modifier
 ) {
     val badgeColor = when (classification.type) {
@@ -65,33 +66,33 @@ fun TargetClassificationBadge(
     }
 
     val localizedTitle = when (classification.type) {
-        TargetClassificationType.PHONE_NO_ANOMALY -> AppStrings.classNoAnomalyTitle(isArabic)
-        TargetClassificationType.PHONE_WEAK_MAGNETIC_ANOMALY -> AppStrings.classWeakAnomalyTitle(isArabic)
-        TargetClassificationType.PHONE_STRONG_MAGNETIC_OBJECT -> AppStrings.classStrongAnomalyTitle(isArabic)
-        TargetClassificationType.PHONE_FERROUS_MAGNETIC -> AppStrings.classFerrousTitle(isArabic)
-        TargetClassificationType.PHONE_UNKNOWN_METALLIC_ANOMALY -> AppStrings.classUnknownMetallicTitle(isArabic)
-        TargetClassificationType.EXTERNAL_FERROUS -> AppStrings.classExtFerrousTitle(isArabic)
-        TargetClassificationType.EXTERNAL_NON_FERROUS_GENERAL -> AppStrings.classExtNonFerrousTitle(isArabic)
-        TargetClassificationType.EXTERNAL_GOLD_LIKE_ESTIMATED -> AppStrings.classExtGoldTitle(isArabic)
-        TargetClassificationType.EXTERNAL_SILVER_LIKE_ESTIMATED -> AppStrings.classExtSilverTitle(isArabic)
-        TargetClassificationType.EXTERNAL_COPPER_LIKE_ESTIMATED -> AppStrings.classExtCopperTitle(isArabic)
-        TargetClassificationType.EXTERNAL_ALUMINUM_LIKE_ESTIMATED -> AppStrings.classExtAluminumTitle(isArabic)
-        TargetClassificationType.EXTERNAL_UNKNOWN -> if (isArabic) "هدف غير محدد" else "Unknown Target"
+        TargetClassificationType.PHONE_NO_ANOMALY -> AppStrings.classNoAnomalyTitle(appLanguage)
+        TargetClassificationType.PHONE_WEAK_MAGNETIC_ANOMALY -> AppStrings.classWeakAnomalyTitle(appLanguage)
+        TargetClassificationType.PHONE_STRONG_MAGNETIC_OBJECT -> AppStrings.classStrongAnomalyTitle(appLanguage)
+        TargetClassificationType.PHONE_FERROUS_MAGNETIC -> AppStrings.classFerrousTitle(appLanguage)
+        TargetClassificationType.PHONE_UNKNOWN_METALLIC_ANOMALY -> AppStrings.classUnknownMetallicTitle(appLanguage)
+        TargetClassificationType.EXTERNAL_FERROUS -> AppStrings.classExtFerrousTitle(appLanguage)
+        TargetClassificationType.EXTERNAL_NON_FERROUS_GENERAL -> AppStrings.classExtNonFerrousTitle(appLanguage)
+        TargetClassificationType.EXTERNAL_GOLD_LIKE_ESTIMATED -> AppStrings.classExtGoldTitle(appLanguage)
+        TargetClassificationType.EXTERNAL_SILVER_LIKE_ESTIMATED -> AppStrings.classExtSilverTitle(appLanguage)
+        TargetClassificationType.EXTERNAL_COPPER_LIKE_ESTIMATED -> AppStrings.classExtCopperTitle(appLanguage)
+        TargetClassificationType.EXTERNAL_ALUMINUM_LIKE_ESTIMATED -> AppStrings.classExtAluminumTitle(appLanguage)
+        TargetClassificationType.EXTERNAL_UNKNOWN -> AppStrings.classUnknownMetallicTitle(appLanguage)
     }
 
     val localizedSubtitle = when (classification.type) {
-        TargetClassificationType.PHONE_NO_ANOMALY -> AppStrings.classNoAnomalySub(isArabic)
-        TargetClassificationType.PHONE_WEAK_MAGNETIC_ANOMALY -> AppStrings.classWeakAnomalySub(isArabic)
-        TargetClassificationType.PHONE_STRONG_MAGNETIC_OBJECT -> AppStrings.classStrongAnomalySub(isArabic)
-        TargetClassificationType.PHONE_FERROUS_MAGNETIC -> AppStrings.classFerrousSub(isArabic)
-        TargetClassificationType.PHONE_UNKNOWN_METALLIC_ANOMALY -> AppStrings.classUnknownMetallicSub(isArabic)
-        TargetClassificationType.EXTERNAL_FERROUS -> AppStrings.classExtFerrousSub(isArabic)
-        TargetClassificationType.EXTERNAL_NON_FERROUS_GENERAL -> AppStrings.classExtNonFerrousSub(isArabic)
-        TargetClassificationType.EXTERNAL_GOLD_LIKE_ESTIMATED -> AppStrings.classExtGoldSub(isArabic)
-        TargetClassificationType.EXTERNAL_SILVER_LIKE_ESTIMATED -> AppStrings.classExtSilverSub(isArabic)
-        TargetClassificationType.EXTERNAL_COPPER_LIKE_ESTIMATED -> AppStrings.classExtCopperSub(isArabic)
-        TargetClassificationType.EXTERNAL_ALUMINUM_LIKE_ESTIMATED -> AppStrings.classExtAluminumSub(isArabic)
-        TargetClassificationType.EXTERNAL_UNKNOWN -> if (isArabic) "تحليل الإشارة جاري" else "Signal analysis in progress"
+        TargetClassificationType.PHONE_NO_ANOMALY -> AppStrings.classNoAnomalySub(appLanguage)
+        TargetClassificationType.PHONE_WEAK_MAGNETIC_ANOMALY -> AppStrings.classWeakAnomalySub(appLanguage)
+        TargetClassificationType.PHONE_STRONG_MAGNETIC_OBJECT -> AppStrings.classStrongAnomalySub(appLanguage)
+        TargetClassificationType.PHONE_FERROUS_MAGNETIC -> AppStrings.classFerrousSub(appLanguage)
+        TargetClassificationType.PHONE_UNKNOWN_METALLIC_ANOMALY -> AppStrings.classUnknownMetallicSub(appLanguage)
+        TargetClassificationType.EXTERNAL_FERROUS -> AppStrings.classExtFerrousSub(appLanguage)
+        TargetClassificationType.EXTERNAL_NON_FERROUS_GENERAL -> AppStrings.classExtNonFerrousSub(appLanguage)
+        TargetClassificationType.EXTERNAL_GOLD_LIKE_ESTIMATED -> AppStrings.classExtGoldSub(appLanguage)
+        TargetClassificationType.EXTERNAL_SILVER_LIKE_ESTIMATED -> AppStrings.classExtSilverSub(appLanguage)
+        TargetClassificationType.EXTERNAL_COPPER_LIKE_ESTIMATED -> AppStrings.classExtCopperSub(appLanguage)
+        TargetClassificationType.EXTERNAL_ALUMINUM_LIKE_ESTIMATED -> AppStrings.classExtAluminumSub(appLanguage)
+        TargetClassificationType.EXTERNAL_UNKNOWN -> AppStrings.classUnknownMetallicSub(appLanguage)
     }
 
     Column(
@@ -115,14 +116,14 @@ fun TargetClassificationBadge(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = AppStrings.targetClassification(isArabic),
+                    text = AppStrings.targetClassification(appLanguage),
                     style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
                 )
             }
 
             if (classification.isEstimatedOnly) {
                 Text(
-                    text = AppStrings.estimated(isArabic),
+                    text = AppStrings.estimated(appLanguage),
                     style = MaterialTheme.typography.labelSmall.copy(
                         color = AmberRadar,
                         fontSize = 9.sp,
@@ -168,7 +169,7 @@ fun TargetClassificationBadge(
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = if (isArabic) "قم بتوصيل ملف كاشف خارجي لتمييز نوع المعدن والطور (VDI)" else "Connect external hardware sensor coil for full VDI discrimination",
+                    text = AppStrings.connectExtSensorCoil(appLanguage),
                     fontSize = 11.sp,
                     color = CyanGlow
                 )

@@ -88,7 +88,7 @@ fun DetectScreen(
 
     val scrollState = rememberScrollState()
 
-    val localizedModeTitle = AppStrings.modeTitle(currentMode, isAr)
+    val localizedModeTitle = AppStrings.modeTitle(currentMode, appLanguage)
 
     Column(
         modifier = modifier
@@ -111,7 +111,7 @@ fun DetectScreen(
         ) {
             Column {
                 Text(
-                    text = AppStrings.modeLabel(isAr),
+                    text = AppStrings.modeLabel(appLanguage),
                     style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary, fontSize = 9.sp)
                 )
                 Text(
@@ -132,7 +132,7 @@ fun DetectScreen(
                 ) {
                     Icon(
                         imageVector = if (audioConfig.isEnabled) Icons.Default.VolumeUp else Icons.Default.VolumeOff,
-                        contentDescription = AppStrings.audioFeedback(isAr),
+                        contentDescription = AppStrings.audioFeedback(appLanguage),
                         tint = if (audioConfig.isEnabled) CyanGlow else TextSecondary,
                         modifier = Modifier.size(20.dp)
                     )
@@ -152,7 +152,7 @@ fun DetectScreen(
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = AppStrings.zeroBaseline(isAr), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text(text = AppStrings.zeroBaseline(appLanguage), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -161,19 +161,19 @@ fun DetectScreen(
         CircularDetectorMeter(
             signal = processedSignal,
             isDetecting = isDetecting,
-            isArabic = isAr
+            appLanguage = appLanguage
         )
 
         // Metrics Readout Cards
         SignalReadoutCards(
             signal = processedSignal,
-            isArabic = isAr
+            appLanguage = appLanguage
         )
 
         // Target Classification Badge
         TargetClassificationBadge(
             classification = processedSignal.classification,
-            isArabic = isAr
+            appLanguage = appLanguage
         )
 
         // Real-Time Scrolling Graph
@@ -181,7 +181,7 @@ fun DetectScreen(
             points = graphPoints,
             selectedWindowSec = timeWindow,
             onSelectWindow = { viewModel.setGraphTimeWindow(it) },
-            isArabic = isAr
+            appLanguage = appLanguage
         )
 
         // Primary Control Buttons Row
@@ -211,7 +211,7 @@ fun DetectScreen(
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = if (isDetecting) AppStrings.stopScan(isAr) else AppStrings.startScan(isAr),
+                    text = if (isDetecting) AppStrings.stopScan(appLanguage) else AppStrings.startScan(appLanguage),
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp
                 )
@@ -236,7 +236,7 @@ fun DetectScreen(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = AppStrings.calibrateBtn(isAr), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                Text(text = AppStrings.calibrateBtn(appLanguage), fontSize = 11.sp, fontWeight = FontWeight.Bold)
             }
 
             // Log Detection Event Button
@@ -258,12 +258,12 @@ fun DetectScreen(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = AppStrings.saveLogBtn(isAr), fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                Text(text = AppStrings.saveLogBtn(appLanguage), fontSize = 11.sp, fontWeight = FontWeight.Bold)
             }
         }
 
         // Physics Disclaimer Banner
-        HonestDisclaimerBanner(isArabic = isAr)
+        HonestDisclaimerBanner(appLanguage = appLanguage)
 
         Spacer(modifier = Modifier.height(12.dp))
     }
@@ -274,22 +274,22 @@ fun DetectScreen(
             onDismissRequest = { showSaveDialog = false },
             title = {
                 Text(
-                    text = AppStrings.saveLogTitle(isAr),
+                    text = AppStrings.saveLogTitle(appLanguage),
                     style = MaterialTheme.typography.titleLarge.copy(color = TextPrimary)
                 )
             },
             text = {
                 Column {
                     Text(
-                        text = "${AppStrings.peakField(isAr)} ${String.format(Locale.US, "%.1f", processedSignal.rawMagnitudeUt)} µT (Δ ${String.format(Locale.US, "%.1f", processedSignal.deltaUt)} µT)",
+                        text = "${AppStrings.peakField(appLanguage)} ${String.format(Locale.US, "%.1f", processedSignal.rawMagnitudeUt)} µT (Δ ${String.format(Locale.US, "%.1f", processedSignal.deltaUt)} µT)",
                         style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     OutlinedTextField(
                         value = notesText,
                         onValueChange = { notesText = it },
-                        label = { Text(AppStrings.saveLogNotesHint(isAr)) },
-                        placeholder = { Text(if (isAr) "مثال: عمق 10 سم، حديقة منزلية، أرض صخرية..." else "e.g., Depth ~10cm in backyard, rocky ground...") },
+                        label = { Text(AppStrings.saveLogNotesHint(appLanguage)) },
+                        placeholder = { Text(AppStrings.saveLogNotesPlaceholder(appLanguage)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("save_notes_input"),
@@ -312,14 +312,14 @@ fun DetectScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = AmberRadar, contentColor = DetectorDarkBg),
                     modifier = Modifier.testTag("save_confirm_btn")
                 ) {
-                    Text(AppStrings.saveToHistory(isAr), fontWeight = FontWeight.Bold)
+                    Text(AppStrings.saveToHistory(appLanguage), fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { showSaveDialog = false }
                 ) {
-                    Text(AppStrings.cancel(isAr), color = TextSecondary)
+                    Text(AppStrings.cancel(appLanguage), color = TextSecondary)
                 }
             },
             containerColor = DetectorSurfaceCard

@@ -1,0 +1,99 @@
+<resources>
+    <string name="app_name">MetalScan Pro</string>
+    <string name="nav_detect">Detectar</string>
+    <string name="nav_calibration">Calibrar</string>
+    <string name="nav_devices">Hardware</string>
+    <string name="nav_history">Histórico</string>
+    <string name="nav_settings">Configurações</string>
+
+    <!-- Detection Screen -->
+    <string name="title_detector">Detector em Tempo Real</string>
+    <string name="label_phone_mode">MAGNETÔMETRO DO TELEFONE</string>
+    <string name="label_external_mode">SENSOR DE HARDWARE EXTERNO</string>
+    <string name="label_sim_mode">MODO DE SIMULAÇÃO DE TESTE</string>
+    <string name="label_current_field">Campo Atual</string>
+    <string name="label_baseline">Linha de Base</string>
+    <string name="label_delta">Delta (Δ)</string>
+    <string name="label_signal_strength">Força do Sinal</string>
+    <string name="label_stability">Estabilidade</string>
+    <string name="label_confidence">Confiança</string>
+    <string name="label_snr">SNR</string>
+    <string name="label_classification">Classificação do Alvo</string>
+    <string name="btn_start_detection">INICIAR VARREDURA</string>
+    <string name="btn_stop_detection">PARAR VARREDURA</string>
+    <string name="btn_calibrate">CALIBRAR</string>
+    <string name="btn_reset_baseline">ZERAR BASE</string>
+    <string name="btn_save_event">SALVAR REGISTRO</string>
+    <string name="dialog_save_title">Salvar Registro de Detecção</string>
+    <string name="dialog_save_notes_hint">Adicionar notas de campo (ex: Profundidade ~10cm, perto da árvore)...</string>
+    <string name="dialog_save_confirm">Salvar no Histórico</string>
+    <string name="dialog_cancel">Cancelar</string>
+
+    <!-- Calibration -->
+    <string name="title_calibration">Calibração e Autodiagnóstico</string>
+    <string name="calib_step_1">1. Autoteste de Sensor e Taxa</string>
+    <string name="calib_step_2">2. Medir Campo Geomagnético Ambiente</string>
+    <string name="calib_step_3">3. Amostragem de Movimento Multiponto</string>
+    <string name="calib_step_4">4. Calcular Linha Base Geométrica</string>
+    <string name="calib_step_5">5. Analisar Nível de Ruído e Variância</string>
+    <string name="calib_step_6">6. Calcular Limiar Dinâmico</string>
+    <string name="calib_step_7">7. Compensação Ambiental Contínua</string>
+    <string name="calib_step_8">8. Ajuste de Sensibilidade</string>
+    <string name="calib_step_9">9. Avaliação Final de Qualidade</string>
+    <string name="calib_guide_instruction">Afaste o telefone de metais e gire-o lentamente em forma de oito no ar.</string>
+    <string name="calib_quality_excellent">EXCELENTE (Baixo Ruído, Ótimo)</string>
+    <string name="calib_quality_good">BOM (Ruído Menor Detectado)</string>
+    <string name="calib_quality_poor">RUIM (Alta Interferência)</string>
+    <string name="calib_btn_start">Iniciar Calibração Guiada</string>
+    <string name="calib_btn_applying">Calibrando...</string>
+    <string name="calib_btn_complete">Calibração Concluída</string>
+
+    <!-- Hardware & Devices -->
+    <string name="title_devices">Sensores de Hardware Externos</string>
+    <string name="ble_section_title">Bluetooth Low Energy (BLE)</string>
+    <string name="ble_scan_button">Buscar Bobinas BLE</string>
+    <string name="ble_stop_scan">Parar Busca</string>
+    <string name="ble_no_devices">Nenhum detector BLE encontrado no alcance.</string>
+    <string name="usb_section_title">Interface USB OTG / Serial</string>
+    <string name="usb_status_connected">Hardware USB Conectado</string>
+    <string name="usb_status_disconnected">Nenhum Detector USB Detectado</string>
+    <string name="usb_btn_connect">Conectar Dispositivo USB</string>
+    <string name="proto_config_title">Protocolo de Telemetria</string>
+    <string name="proto_standard">Sentença Padrão ASCII/NMEA ($MDDATA...)</string>
+    <string name="proto_json">Fluxo de Telemetria JSON</string>
+    <string name="proto_binary">Quadro Binário de Alta Velocidade</string>
+    <string name="sensor_simulation_toggle">Modo de Simulação de Desenvolvedor</string>
+    <string name="sensor_sim_warning">O modo de teste gera sinais sintéticos apenas para verificação de algoritmos e interface.</string>
+
+    <!-- History -->
+    <string name="title_history">Histórico e Registros</string>
+    <string name="history_empty">Nenhum evento registrado ainda. Toque em "SALVAR REGISTRO" na tela de detecção.</string>
+    <string name="history_gps_location">Coordenadas GPS</string>
+    <string name="history_peak">Campo Máximo</string>
+    <string name="history_duration">Duração</string>
+    <string name="history_clear_all">Limpar Todos os Registros</string>
+
+    <!-- Settings & Modes -->
+    <string name="title_settings">Configurações e Modos do Detector</string>
+    <string name="mode_quick">Varredura Rápida (Resposta Imediata)</string>
+    <string name="mode_deep">Análise Profunda (SNR Aprimorado)</string>
+    <string name="mode_ferrous">Foco em Metais Ferrosos</string>
+    <string name="mode_non_ferrous">Discriminação Não Ferrosa (Apenas Hardware Externo)</string>
+    <string name="mode_expert">Modo Especialista / Manual</string>
+    <string name="setting_audio_toggle">Feedback Sonoro</string>
+    <string name="setting_tone_type">Modo de Tom</string>
+    <string name="setting_vibration_toggle">Feedback Háptico / Vibração</string>
+    <string name="setting_vibration_mode">Padrão de Vibração</string>
+    <string name="setting_sensitivity">Sensibilidade de Detecção</string>
+    <string name="setting_threshold">Limiar de Ativação</string>
+    <string name="setting_filter_alpha">Força do Filtro Passa-Baixas</string>
+    <string name="setting_sampling_rate">Frequência de Amostragem (Hz)</string>
+    <string name="setting_env_compensation">Compensação Contínua de Deriva</string>
+    <string name="setting_audio_min_signal">Sinal Mínimo para Áudio</string>
+    <string name="setting_audio_volume">Volume do Tom</string>
+
+    <!-- Scientific Disclaimer -->
+    <string name="disclaimer_phone_limitation">Smartphones não conseguem identificar ouro, prata ou cobre usando apenas o magnetômetro interno. O sensor mede variações de metais ferromagnéticos. Para discriminação precisa de não-ferrosos, é necessária uma bobina detectora externa dedicada.</string>
+    <string name="disclaimer_not_guaranteed">Todas as classificações de alvos são estimativas matemáticas baseadas em sinais e não são garantidas cientificamente.</string>
+    <string name="no_magnetometer_error">Este dispositivo não possui magnetômetro interno. Conecte um detector externo BLE/USB ou ative o modo de teste.</string>
+</resources>

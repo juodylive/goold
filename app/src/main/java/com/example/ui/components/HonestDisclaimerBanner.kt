@@ -42,7 +42,8 @@ import com.example.ui.theme.TextSecondary
 
 @Composable
 fun HonestDisclaimerBanner(
-    isArabic: Boolean = true,
+    appLanguage: String = "ar",
+    isArabic: Boolean = (appLanguage == "ar"),
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -73,7 +74,7 @@ fun HonestDisclaimerBanner(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = AppStrings.disclaimerTitle(isArabic),
+                    text = AppStrings.disclaimerTitle(appLanguage),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -93,7 +94,7 @@ fun HonestDisclaimerBanner(
         AnimatedVisibility(visible = isExpanded) {
             Column(modifier = Modifier.padding(top = 8.dp)) {
                 Text(
-                    text = AppStrings.disclaimerBody(isArabic),
+                    text = AppStrings.disclaimerBody(appLanguage),
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = TextSecondary,
                         lineHeight = 18.sp

@@ -51,10 +51,13 @@ fun TopDetectorAppBar(
     activeSensor: MetalDetectorSensor,
     connectionStatus: ConnectionStatus,
     isDetecting: Boolean,
-    isArabic: Boolean = true,
+    appLanguage: String = "ar",
+    isArabic: Boolean = (appLanguage == "ar"),
     onToggleLanguage: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val langInfo = AppStrings.getLanguageInfo(appLanguage)
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -70,17 +73,17 @@ fun TopDetectorAppBar(
         Column(modifier = Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = AppStrings.appTitle(isArabic),
+                    text = AppStrings.appTitle(appLanguage),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Black,
-                        letterSpacing = if (isArabic) 0.5.sp else 1.5.sp,
+                        letterSpacing = if (langInfo.isRtl) 0.5.sp else 1.5.sp,
                         color = TextPrimary,
                         fontSize = 18.sp
                     )
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = AppStrings.appPro(isArabic),
+                    text = AppStrings.appPro(appLanguage),
                     style = MaterialTheme.typography.labelLarge.copy(
                         color = AmberRadar,
                         fontWeight = FontWeight.Bold,
@@ -92,11 +95,11 @@ fun TopDetectorAppBar(
                 )
             }
             Text(
-                text = AppStrings.appSubtitle(isArabic),
+                text = AppStrings.appSubtitle(appLanguage),
                 style = MaterialTheme.typography.labelSmall.copy(
                     fontSize = 8.5.sp,
                     color = TextSecondary,
-                    letterSpacing = if (isArabic) 0.sp else 0.5.sp
+                    letterSpacing = if (langInfo.isRtl) 0.sp else 0.5.sp
                 )
             )
         }
@@ -123,7 +126,7 @@ fun TopDetectorAppBar(
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = if (isArabic) "🇸🇦 عربي" else "🇺🇸 EN",
+                    text = "${langInfo.flag} ${langInfo.code.uppercase()}",
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     color = CyanGlow
@@ -139,10 +142,10 @@ fun TopDetectorAppBar(
                     .padding(horizontal = 8.dp, vertical = 4.dp)
             ) {
                 val (icon, label) = when (activeSensor.sensorSource) {
-                    SensorSource.PHONE_MAGNETOMETER -> Icons.Default.PhoneAndroid to AppStrings.sensorPhone(isArabic)
-                    SensorSource.EXTERNAL_BLUETOOTH_BLE -> Icons.Default.Bluetooth to AppStrings.sensorBle(isArabic)
-                    SensorSource.EXTERNAL_USB_OTG -> Icons.Default.Usb to AppStrings.sensorUsb(isArabic)
-                    SensorSource.DEVELOPER_SIMULATION_MODE -> Icons.Default.BugReport to AppStrings.sensorSim(isArabic)
+                    SensorSource.PHONE_MAGNETOMETER -> Icons.Default.PhoneAndroid to AppStrings.sensorPhone(appLanguage)
+                    SensorSource.EXTERNAL_BLUETOOTH_BLE -> Icons.Default.Bluetooth to AppStrings.sensorBle(appLanguage)
+                    SensorSource.EXTERNAL_USB_OTG -> Icons.Default.Usb to AppStrings.sensorUsb(appLanguage)
+                    SensorSource.DEVELOPER_SIMULATION_MODE -> Icons.Default.BugReport to AppStrings.sensorSim(appLanguage)
                 }
 
                 val statusColor = when {

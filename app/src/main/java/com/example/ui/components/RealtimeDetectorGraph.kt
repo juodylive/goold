@@ -53,7 +53,8 @@ fun RealtimeDetectorGraph(
     points: List<GraphPoint>,
     selectedWindowSec: Int,
     onSelectWindow: (Int) -> Unit,
-    isArabic: Boolean = true,
+    appLanguage: String = "ar",
+    isArabic: Boolean = (appLanguage == "ar"),
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -71,19 +72,19 @@ fun RealtimeDetectorGraph(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = AppStrings.oscillogram(isArabic),
+                text = AppStrings.oscillogram(appLanguage),
                 style = MaterialTheme.typography.labelLarge.copy(color = CyanGlow)
             )
 
             // Legend indicators
             Row(verticalAlignment = Alignment.CenterVertically) {
-                LegendIndicator(color = TextMuted, label = AppStrings.graphRaw(isArabic))
+                LegendIndicator(color = TextMuted, label = AppStrings.graphRaw(appLanguage))
                 Spacer(modifier = Modifier.width(6.dp))
-                LegendIndicator(color = CyanGlow, label = AppStrings.graphFiltered(isArabic))
+                LegendIndicator(color = CyanGlow, label = AppStrings.graphFiltered(appLanguage))
                 Spacer(modifier = Modifier.width(6.dp))
-                LegendIndicator(color = EmeraldSignal, label = AppStrings.graphBase(isArabic))
+                LegendIndicator(color = EmeraldSignal, label = AppStrings.graphBase(appLanguage))
                 Spacer(modifier = Modifier.width(6.dp))
-                LegendIndicator(color = AmberRadar, label = AppStrings.graphThreshold(isArabic))
+                LegendIndicator(color = AmberRadar, label = AppStrings.graphThreshold(appLanguage))
             }
         }
 

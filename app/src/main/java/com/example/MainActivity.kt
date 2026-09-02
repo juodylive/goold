@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-data class NavItem(val route: String, val getTitle: (Boolean) -> String, val icon: ImageVector, val tag: String)
+data class NavItem(val route: String, val getTitle: (String) -> String, val icon: ImageVector, val tag: String)
 
 @Composable
 fun MetalScanProApp(
@@ -112,6 +112,7 @@ fun MetalScanProApp(
                     activeSensor = activeSensor,
                     connectionStatus = connectionStatus,
                     isDetecting = isDetecting,
+                    appLanguage = appLanguage,
                     isArabic = isAr,
                     onToggleLanguage = { viewModel.toggleAppLanguage() }
                 )
@@ -126,7 +127,7 @@ fun MetalScanProApp(
                 ) {
                     navItems.forEach { item ->
                         val isSelected = currentRoute == item.route
-                        val title = item.getTitle(isAr)
+                        val title = item.getTitle(appLanguage)
                         NavigationBarItem(
                             selected = isSelected,
                             onClick = {
