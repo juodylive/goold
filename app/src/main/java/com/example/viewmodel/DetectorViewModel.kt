@@ -104,6 +104,24 @@ class DetectorViewModel(
     private val _vibrationConfig = MutableStateFlow(VibrationFeedbackConfig())
     val vibrationConfig: StateFlow<VibrationFeedbackConfig> = _vibrationConfig.asStateFlow()
 
+    // App Language ("ar" for Arabic, "en" for English) - Defaults to Arabic
+    private val _appLanguage = MutableStateFlow(
+        if (java.util.Locale.getDefault().language == "en") "en" else "ar"
+    )
+    val appLanguage: StateFlow<String> = _appLanguage.asStateFlow()
+
+    fun setAppLanguage(lang: String) {
+        _appLanguage.value = lang
+    }
+
+    fun setLanguage(lang: String) {
+        _appLanguage.value = lang
+    }
+
+    fun toggleAppLanguage() {
+        _appLanguage.value = if (_appLanguage.value == "ar") "en" else "ar"
+    }
+
     // Real-Time Scrolling Graph Buffer
     private val graphDeque = ConcurrentLinkedDeque<GraphPoint>()
     private val _graphPoints = MutableStateFlow<List<GraphPoint>>(emptyList())

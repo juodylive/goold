@@ -18,19 +18,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BookmarkAdd
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.VolumeOff
 import androidx.compose.material.icons.filled.VolumeUp
-import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -52,7 +48,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.core.SensorSource
+import com.example.core.AppStrings
+import com.example.core.DetectionMode
 import com.example.ui.components.CircularDetectorMeter
 import com.example.ui.components.HonestDisclaimerBanner
 import com.example.ui.components.RealtimeDetectorGraph
@@ -68,6 +65,7 @@ import com.example.ui.theme.EmeraldSignal
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
 import com.example.viewmodel.DetectorViewModel
+import java.util.Locale
 
 @Composable
 fun DetectScreen(
@@ -82,12 +80,15 @@ fun DetectScreen(
     val timeWindow by viewModel.graphTimeWindowSec.collectAsStateWithLifecycle()
     val currentMode by viewModel.currentMode.collectAsStateWithLifecycle()
     val audioConfig by viewModel.audioConfig.collectAsStateWithLifecycle()
-    val activeSensor by viewModel.activeSensor.collectAsStateWithLifecycle()
+    val appLanguage by viewModel.appLanguage.collectAsStateWithLifecycle()
+    val isAr = appLanguage == "ar"
 
     var showSaveDialog by remember { mutableStateOf(false) }
     var notesText by remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
+
+    val localizedModeTitle = AppStrings.modeTitle(currentMode, isAr)
 
     Column(
         modifier = modifier
@@ -110,11 +111,11 @@ fun DetectScreen(
         ) {
             Column {
                 Text(
-                    text = "MODE",
+                    text = AppStrings.modeLabel(isAr),
                     style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary, fontSize = 9.sp)
                 )
                 Text(
-                    text = currentMode.title,
+                    text = localizedModeTitle,
                     style = MaterialTheme.typography.titleMedium.copy(
                         color = AmberRadar,
                         fontWeight = FontWeight.Bold,
@@ -131,7 +132,7 @@ fun DetectScreen(
                 ) {
                     Icon(
                         imageVector = if (audioConfig.isEnabled) Icons.Default.VolumeUp else Icons.Default.VolumeOff,
-                        contentDescription = "Audio Feedback",
+                        contentDescription = AppStrings.audioFeedback(isAr),
                         tint = if (audioConfig.isEnabled) CyanGlow else TextSecondary,
                         modifier = Modifier.size(20.dp)
                     )
@@ -151,7 +152,7 @@ fun DetectScreen(
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = "ZERO", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text(text = AppStrings.zeroBaseline(isAr), fontSize = 11.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -159,24 +160,28 @@ fun DetectScreen(
         // Circular Gauge Meter
         CircularDetectorMeter(
             signal = processedSignal,
-            isDetecting = isDetecting
+            isDetecting = isDetecting,
+            isArabic = isAr
         )
 
         // Metrics Readout Cards
         SignalReadoutCards(
-            signal = processedSignal
+            signal = processedSignal,
+            isArabic = isAr
         )
 
         // Target Classification Badge
         TargetClassificationBadge(
-            classification = processedSignal.classification
+            classification = processedSignal.classification,
+            isArabic = isAr
         )
 
         // Real-Time Scrolling Graph
         RealtimeDetectorGraph(
             points = graphPoints,
             selectedWindowSec = timeWindow,
-            onSelectWindow = { viewModel.setGraphTimeWindow(it) }
+            onSelectWindow = { viewModel.setGraphTimeWindow(it) },
+            isArabic = isAr
         )
 
         // Primary Control Buttons Row
@@ -206,7 +211,7 @@ fun DetectScreen(
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = if (isDetecting) "STOP SCAN" else "START SCAN",
+                    text = if (isDetecting) AppStrings.stopScan(isAr) else AppStrings.startScan(isAr),
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp
                 )
@@ -231,7 +236,7 @@ fun DetectScreen(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = "CALIBRATE", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                Text(text = AppStrings.calibrateBtn(isAr), fontSize = 11.sp, fontWeight = FontWeight.Bold)
             }
 
             // Log Detection Event Button
@@ -253,12 +258,12 @@ fun DetectScreen(
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = "LOG", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                Text(text = AppStrings.saveLogBtn(isAr), fontSize = 11.sp, fontWeight = FontWeight.Bold)
             }
         }
 
         // Physics Disclaimer Banner
-        HonestDisclaimerBanner()
+        HonestDisclaimerBanner(isArabic = isAr)
 
         Spacer(modifier = Modifier.height(12.dp))
     }
@@ -269,22 +274,22 @@ fun DetectScreen(
             onDismissRequest = { showSaveDialog = false },
             title = {
                 Text(
-                    text = "Save Detection Event",
+                    text = AppStrings.saveLogTitle(isAr),
                     style = MaterialTheme.typography.titleLarge.copy(color = TextPrimary)
                 )
             },
             text = {
                 Column {
                     Text(
-                        text = "Peak: ${String.format("%.1f", processedSignal.rawMagnitudeUt)} µT (Δ ${String.format("%.1f", processedSignal.deltaUt)} µT)\nTarget: ${processedSignal.classification.title}",
+                        text = "${AppStrings.peakField(isAr)} ${String.format(Locale.US, "%.1f", processedSignal.rawMagnitudeUt)} µT (Δ ${String.format(Locale.US, "%.1f", processedSignal.deltaUt)} µT)",
                         style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     OutlinedTextField(
                         value = notesText,
                         onValueChange = { notesText = it },
-                        label = { Text("Field Notes & Location Info") },
-                        placeholder = { Text("e.g., Depth ~10cm in backyard, rocky ground...") },
+                        label = { Text(AppStrings.saveLogNotesHint(isAr)) },
+                        placeholder = { Text(if (isAr) "مثال: عمق 10 سم، حديقة منزلية، أرض صخرية..." else "e.g., Depth ~10cm in backyard, rocky ground...") },
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("save_notes_input"),
@@ -307,14 +312,14 @@ fun DetectScreen(
                     colors = ButtonDefaults.buttonColors(containerColor = AmberRadar, contentColor = DetectorDarkBg),
                     modifier = Modifier.testTag("save_confirm_btn")
                 ) {
-                    Text("Save to History", fontWeight = FontWeight.Bold)
+                    Text(AppStrings.saveToHistory(isAr), fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { showSaveDialog = false }
                 ) {
-                    Text("Cancel", color = TextSecondary)
+                    Text(AppStrings.cancel(isAr), color = TextSecondary)
                 }
             },
             containerColor = DetectorSurfaceCard

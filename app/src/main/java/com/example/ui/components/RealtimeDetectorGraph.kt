@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.core.AppStrings
 import com.example.ui.theme.AmberRadar
 import com.example.ui.theme.CrimsonAlert
 import com.example.ui.theme.CyanGlow
@@ -52,6 +53,7 @@ fun RealtimeDetectorGraph(
     points: List<GraphPoint>,
     selectedWindowSec: Int,
     onSelectWindow: (Int) -> Unit,
+    isArabic: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -69,19 +71,19 @@ fun RealtimeDetectorGraph(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "OSCILLOGRAM (µT)",
+                text = AppStrings.oscillogram(isArabic),
                 style = MaterialTheme.typography.labelLarge.copy(color = CyanGlow)
             )
 
             // Legend indicators
             Row(verticalAlignment = Alignment.CenterVertically) {
-                LegendIndicator(color = TextMuted, label = "Raw")
-                Spacer(modifier = Modifier.width(8.dp))
-                LegendIndicator(color = CyanGlow, label = "Filtered")
-                Spacer(modifier = Modifier.width(8.dp))
-                LegendIndicator(color = EmeraldSignal, label = "Base")
-                Spacer(modifier = Modifier.width(8.dp))
-                LegendIndicator(color = AmberRadar, label = "Threshold")
+                LegendIndicator(color = TextMuted, label = AppStrings.graphRaw(isArabic))
+                Spacer(modifier = Modifier.width(6.dp))
+                LegendIndicator(color = CyanGlow, label = AppStrings.graphFiltered(isArabic))
+                Spacer(modifier = Modifier.width(6.dp))
+                LegendIndicator(color = EmeraldSignal, label = AppStrings.graphBase(isArabic))
+                Spacer(modifier = Modifier.width(6.dp))
+                LegendIndicator(color = AmberRadar, label = AppStrings.graphThreshold(isArabic))
             }
         }
 

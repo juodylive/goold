@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.core.AppStrings
 import com.example.signal_processing.ProcessedSignal
 import com.example.ui.theme.AmberRadar
 import com.example.ui.theme.AmberRadarLight
@@ -55,6 +56,7 @@ import kotlin.math.sin
 fun CircularDetectorMeter(
     signal: ProcessedSignal,
     isDetecting: Boolean,
+    isArabic: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     // Smooth meter animated angle
@@ -227,9 +229,9 @@ fun CircularDetectorMeter(
             )
 
             Text(
-                text = "µT (MICROTESLA)",
+                text = AppStrings.microtesla(isArabic),
                 style = MaterialTheme.typography.labelSmall.copy(
-                    letterSpacing = 1.5.sp,
+                    letterSpacing = if (isArabic) 0.5.sp else 1.5.sp,
                     color = CyanGlow
                 )
             )

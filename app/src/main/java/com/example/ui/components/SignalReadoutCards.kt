@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.core.AppStrings
 import com.example.signal_processing.ProcessedSignal
 import com.example.ui.theme.AmberRadar
 import com.example.ui.theme.CyanGlow
@@ -34,6 +35,7 @@ import java.util.Locale
 @Composable
 fun SignalReadoutCards(
     signal: ProcessedSignal,
+    isArabic: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -48,21 +50,21 @@ fun SignalReadoutCards(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             ReadoutMetricItem(
-                label = "BASELINE",
+                label = AppStrings.baseline(isArabic),
                 value = String.format(Locale.US, "%.1f", signal.baselineUt),
                 unit = "µT",
                 accentColor = EmeraldSignal,
                 modifier = Modifier.weight(1f)
             )
             ReadoutMetricItem(
-                label = "DELTA (Δ)",
+                label = AppStrings.delta(isArabic),
                 value = (if (signal.deltaUt >= 0) "+" else "") + String.format(Locale.US, "%.1f", signal.deltaUt),
                 unit = "µT",
                 accentColor = if (signal.isThresholdExceeded) AmberRadar else CyanGlow,
                 modifier = Modifier.weight(1f)
             )
             ReadoutMetricItem(
-                label = "THRESHOLD",
+                label = AppStrings.threshold(isArabic),
                 value = String.format(Locale.US, "%.1f", signal.effectiveThresholdUt),
                 unit = "µT",
                 accentColor = AmberRadar,
@@ -76,28 +78,28 @@ fun SignalReadoutCards(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             ReadoutMetricItem(
-                label = "SIGNAL",
+                label = AppStrings.signal(isArabic),
                 value = "${signal.signalStrengthPct.toInt()}",
                 unit = "%",
                 accentColor = if (signal.signalStrengthPct > 50) AmberRadar else CyanGlow,
                 modifier = Modifier.weight(1f)
             )
             ReadoutMetricItem(
-                label = "STABILITY",
+                label = AppStrings.stability(isArabic),
                 value = "${signal.signalStabilityPct.toInt()}",
                 unit = "%",
                 accentColor = if (signal.signalStabilityPct > 70) EmeraldSignal else AmberRadar,
                 modifier = Modifier.weight(1f)
             )
             ReadoutMetricItem(
-                label = "SNR",
+                label = AppStrings.snr(isArabic),
                 value = String.format(Locale.US, "%.1f", signal.snrDb),
                 unit = "dB",
                 accentColor = CyanGlow,
                 modifier = Modifier.weight(1f)
             )
             ReadoutMetricItem(
-                label = "CONFIDENCE",
+                label = AppStrings.confidence(isArabic),
                 value = "${signal.detectionConfidencePct.toInt()}",
                 unit = "%",
                 accentColor = if (signal.detectionConfidencePct > 50) EmeraldSignal else TextSecondary,

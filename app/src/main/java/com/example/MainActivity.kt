@@ -24,10 +24,13 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -37,6 +40,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.core.AppStrings
 import com.example.ui.components.TopDetectorAppBar
 import com.example.ui.screens.CalibrationScreen
 import com.example.ui.screens.DetectScreen
@@ -74,119 +78,130 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+data class NavItem(val route: String, val getTitle: (Boolean) -> String, val icon: ImageVector, val tag: String)
+
 @Composable
 fun MetalScanProApp(
     viewModel: DetectorViewModel
 ) {
-    val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route ?: AppNavDestination.Detect.route
+    val appLanguage by viewModel.appLanguage.collectAsStateWithLifecycle()
+    val isAr = appLanguage == "ar"
+    val layoutDirection = if (isAr) LayoutDirection.Rtl else LayoutDirection.Ltr
 
-    val activeSensor by viewModel.activeSensor.collectAsStateWithLifecycle()
-    val connectionStatus by activeSensor.connectionStatus.collectAsStateWithLifecycle()
-    val isDetecting by viewModel.isDetecting.collectAsStateWithLifecycle()
+    CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
+        val navController = rememberNavController()
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route ?: "detect"
 
-    val navItems = listOf(
-        AppNavDestination.Detect,
-        AppNavDestination.Calibration,
-        AppNavDestination.Devices,
-        AppNavDestination.History,
-        AppNavDestination.Settings
-    )
+        val activeSensor by viewModel.activeSensor.collectAsStateWithLifecycle()
+        val connectionStatus by activeSensor.connectionStatus.collectAsStateWithLifecycle()
+        val isDetecting by viewModel.isDetecting.collectAsStateWithLifecycle()
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize().background(DetectorDarkBg),
-        topBar = {
-            TopDetectorAppBar(
-                activeSensor = activeSensor,
-                connectionStatus = connectionStatus,
-                isDetecting = isDetecting
-            )
-        },
-        bottomBar = {
-            NavigationBar(
-                containerColor = DetectorSurfaceDark,
-                tonalElevation = 0.dp,
-                modifier = Modifier
-                    .border(1.dp, DetectorSurfaceBorder)
-                    .testTag("main_navigation_bar")
-            ) {
-                navItems.forEach { destination ->
-                    val isSelected = currentRoute == destination.route
-                    NavigationBarItem(
-                        selected = isSelected,
-                        onClick = {
-                            if (currentRoute != destination.route) {
-                                navController.navigate(destination.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+        val navItems = listOf(
+            NavItem("detect", { AppStrings.navDetect(it) }, Icons.Default.Sensors, "nav_tab_detect"),
+            NavItem("calibration", { AppStrings.navCalibrate(it) }, Icons.Default.Tune, "nav_tab_calibration"),
+            NavItem("devices", { AppStrings.navHardware(it) }, Icons.Default.PhoneAndroid, "nav_tab_devices"),
+            NavItem("history", { AppStrings.navHistory(it) }, Icons.Default.History, "nav_tab_history"),
+            NavItem("settings", { AppStrings.navSettings(it) }, Icons.Default.Settings, "nav_tab_settings")
+        )
+
+        Scaffold(
+            modifier = Modifier.fillMaxSize().background(DetectorDarkBg),
+            topBar = {
+                TopDetectorAppBar(
+                    activeSensor = activeSensor,
+                    connectionStatus = connectionStatus,
+                    isDetecting = isDetecting,
+                    isArabic = isAr,
+                    onToggleLanguage = { viewModel.toggleAppLanguage() }
+                )
+            },
+            bottomBar = {
+                NavigationBar(
+                    containerColor = DetectorSurfaceDark,
+                    tonalElevation = 0.dp,
+                    modifier = Modifier
+                        .border(1.dp, DetectorSurfaceBorder)
+                        .testTag("main_navigation_bar")
+                ) {
+                    navItems.forEach { item ->
+                        val isSelected = currentRoute == item.route
+                        val title = item.getTitle(isAr)
+                        NavigationBarItem(
+                            selected = isSelected,
+                            onClick = {
+                                if (currentRoute != item.route) {
+                                    navController.navigate(item.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
-                                    launchSingleTop = true
-                                    restoreState = true
                                 }
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = destination.icon,
-                                contentDescription = destination.title,
-                                modifier = Modifier.size(22.dp)
-                            )
-                        },
-                        label = {
-                            Text(
-                                text = destination.title,
-                                fontSize = 11.sp,
-                                color = if (isSelected) AmberRadar else TextSecondary
-                            )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = AmberRadar,
-                            selectedTextColor = AmberRadar,
-                            unselectedIconColor = TextSecondary,
-                            unselectedTextColor = TextSecondary,
-                            indicatorColor = AmberRadar.copy(alpha = 0.15f)
-                        ),
-                        modifier = Modifier.testTag(destination.tag)
-                    )
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = item.icon,
+                                    contentDescription = title,
+                                    modifier = Modifier.size(22.dp)
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = title,
+                                    fontSize = 11.sp,
+                                    color = if (isSelected) AmberRadar else TextSecondary
+                                )
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = AmberRadar,
+                                selectedTextColor = AmberRadar,
+                                unselectedIconColor = TextSecondary,
+                                unselectedTextColor = TextSecondary,
+                                indicatorColor = AmberRadar.copy(alpha = 0.15f)
+                            ),
+                            modifier = Modifier.testTag(item.tag)
+                        )
+                    }
                 }
-            }
-        },
-        containerColor = DetectorDarkBg
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .background(DetectorDarkBg)
-        ) {
-            NavHost(
-                navController = navController,
-                startDestination = AppNavDestination.Detect.route,
-                modifier = Modifier.fillMaxSize()
+            },
+            containerColor = DetectorDarkBg
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .background(DetectorDarkBg)
             ) {
-                composable(AppNavDestination.Detect.route) {
-                    DetectScreen(
-                        viewModel = viewModel,
-                        onNavigateCalibration = {
-                            navController.navigate(AppNavDestination.Calibration.route)
-                        },
-                        onNavigateSettings = {
-                            navController.navigate(AppNavDestination.Settings.route)
-                        }
-                    )
-                }
-                composable(AppNavDestination.Calibration.route) {
-                    CalibrationScreen(viewModel = viewModel)
-                }
-                composable(AppNavDestination.Devices.route) {
-                    DevicesScreen(viewModel = viewModel)
-                }
-                composable(AppNavDestination.History.route) {
-                    HistoryScreen(viewModel = viewModel)
-                }
-                composable(AppNavDestination.Settings.route) {
-                    SettingsScreen(viewModel = viewModel)
+                NavHost(
+                    navController = navController,
+                    startDestination = "detect",
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    composable("detect") {
+                        DetectScreen(
+                            viewModel = viewModel,
+                            onNavigateCalibration = {
+                                navController.navigate("calibration")
+                            },
+                            onNavigateSettings = {
+                                navController.navigate("settings")
+                            }
+                        )
+                    }
+                    composable("calibration") {
+                        CalibrationScreen(viewModel = viewModel)
+                    }
+                    composable("devices") {
+                        DevicesScreen(viewModel = viewModel)
+                    }
+                    composable("history") {
+                        HistoryScreen(viewModel = viewModel)
+                    }
+                    composable("settings") {
+                        SettingsScreen(viewModel = viewModel)
+                    }
                 }
             }
         }

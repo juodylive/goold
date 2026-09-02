@@ -50,6 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.core.AppStrings
 import com.example.database.ScanLogEntity
 import com.example.ui.theme.AmberRadar
 import com.example.ui.theme.CrimsonAlert
@@ -71,6 +72,8 @@ fun HistoryScreen(
     modifier: Modifier = Modifier
 ) {
     val logs by viewModel.allLogs.collectAsStateWithLifecycle()
+    val appLanguage by viewModel.appLanguage.collectAsStateWithLifecycle()
+    val isAr = appLanguage == "ar"
     val context = LocalContext.current
     var showClearConfirmDialog by remember { mutableStateOf(false) }
 
@@ -89,14 +92,14 @@ fun HistoryScreen(
         ) {
             Column {
                 Text(
-                    text = "DETECTION LOGS",
+                    text = AppStrings.historyScreenTitle(isAr),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
                         color = TextPrimary
                     )
                 )
                 Text(
-                    text = "${logs.size} recorded detection events",
+                    text = if (isAr) "${logs.size} حدث كشف مسجل" else "${logs.size} recorded detection events",
                     style = MaterialTheme.typography.bodySmall.copy(color = TextSecondary)
                 )
             }
@@ -108,7 +111,7 @@ fun HistoryScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.DeleteSweep,
-                        contentDescription = "Clear All History",
+                        contentDescription = AppStrings.clearAllHistory(isAr),
                         tint = CrimsonAlert
                     )
                 }
@@ -133,12 +136,12 @@ fun HistoryScreen(
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "No detection events logged yet",
+                        text = AppStrings.noLogsTitle(isAr),
                         style = MaterialTheme.typography.titleMedium.copy(color = TextPrimary)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Press the 'LOG' button on the detection screen during or after a scan to record signals.",
+                        text = AppStrings.noLogsDesc(isAr),
                         style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary),
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
@@ -152,6 +155,7 @@ fun HistoryScreen(
                 items(logs, key = { it.id }) { log ->
                     ScanLogCard(
                         log = log,
+                        isArabic = isAr,
                         onDelete = { viewModel.deleteLog(log.id) },
                         onOpenMap = { lat, lon ->
                             val uri = Uri.parse("geo:$lat,$lon?q=$lat,$lon(MetalScan+Detection)")
@@ -167,8 +171,8 @@ fun HistoryScreen(
     if (showClearConfirmDialog) {
         AlertDialog(
             onDismissRequest = { showClearConfirmDialog = false },
-            title = { Text("Clear All Detection Logs", color = TextPrimary) },
-            text = { Text("Are you sure you want to permanently delete all recorded detection logs?", color = TextSecondary) },
+            title = { Text(AppStrings.clearAllHistory(isAr), color = TextPrimary) },
+            text = { Text(AppStrings.clearAllConfirm(isAr), color = TextSecondary) },
             confirmButton = {
                 Button(
                     onClick = {
@@ -177,12 +181,12 @@ fun HistoryScreen(
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = CrimsonAlert)
                 ) {
-                    Text("Delete All", fontWeight = FontWeight.Bold)
+                    Text(if (isAr) "مسح الكل" else "Delete All", fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showClearConfirmDialog = false }) {
-                    Text("Cancel", color = TextSecondary)
+                    Text(AppStrings.cancel(isAr), color = TextSecondary)
                 }
             },
             containerColor = DetectorSurfaceCard
@@ -193,6 +197,7 @@ fun HistoryScreen(
 @Composable
 fun ScanLogCard(
     log: ScanLogEntity,
+    isArabic: Boolean = true,
     onDelete: () -> Unit,
     onOpenMap: (Double, Double) -> Unit,
     modifier: Modifier = Modifier
@@ -319,7 +324,7 @@ fun ScanLogCard(
                         onClick = { onOpenMap(log.latitude, log.longitude) },
                         contentPadding = androidx.compose.foundation.layout.PaddingValues(0.dp)
                     ) {
-                        Text("View Map", fontSize = 11.sp, color = EmeraldSignal)
+                        Text(AppStrings.viewMap(isArabic), fontSize = 11.sp, color = EmeraldSignal)
                     }
                 }
             }

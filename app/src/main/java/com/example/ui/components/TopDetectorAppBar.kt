@@ -2,6 +2,7 @@ package com.example.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,9 +16,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BatteryStd
 import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.BugReport
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.filled.Usb
 import androidx.compose.material3.Icon
@@ -26,12 +27,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.core.AppStrings
 import com.example.core.SensorSource
 import com.example.sensors.ConnectionStatus
 import com.example.sensors.MetalDetectorSensor
@@ -50,6 +51,8 @@ fun TopDetectorAppBar(
     activeSensor: MetalDetectorSensor,
     connectionStatus: ConnectionStatus,
     isDetecting: Boolean,
+    isArabic: Boolean = true,
+    onToggleLanguage: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -58,86 +61,117 @@ fun TopDetectorAppBar(
             .statusBarsPadding()
             .background(DetectorSurfaceDark)
             .border(1.dp, DetectorSurfaceBorder)
-            .padding(horizontal = 16.dp, vertical = 10.dp)
+            .padding(horizontal = 14.dp, vertical = 10.dp)
             .testTag("top_detector_app_bar"),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         // App Title & Tagline
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "METALSCAN",
+                    text = AppStrings.appTitle(isArabic),
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Black,
-                        letterSpacing = 1.5.sp,
-                        color = TextPrimary
+                        letterSpacing = if (isArabic) 0.5.sp else 1.5.sp,
+                        color = TextPrimary,
+                        fontSize = 18.sp
                     )
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = "PRO",
+                    text = AppStrings.appPro(isArabic),
                     style = MaterialTheme.typography.labelLarge.copy(
                         color = AmberRadar,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 11.sp
                     ),
                     modifier = Modifier
                         .background(AmberRadar.copy(alpha = 0.2f), RoundedCornerShape(4.dp))
-                        .padding(horizontal = 4.dp, vertical = 2.dp)
+                        .padding(horizontal = 5.dp, vertical = 2.dp)
                 )
             }
             Text(
-                text = "PRECISION MAGNETOMETER & TELEMETRY",
+                text = AppStrings.appSubtitle(isArabic),
                 style = MaterialTheme.typography.labelSmall.copy(
-                    fontSize = 8.sp,
+                    fontSize = 8.5.sp,
                     color = TextSecondary,
-                    letterSpacing = 0.8.sp
+                    letterSpacing = if (isArabic) 0.sp else 0.5.sp
                 )
             )
         }
 
-        // Active Sensor & Live Status Pill
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .background(DetectorDarkBg, RoundedCornerShape(20.dp))
-                .border(1.dp, DetectorSurfaceBorder, RoundedCornerShape(20.dp))
-                .padding(horizontal = 10.dp, vertical = 5.dp)
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            val (icon, label) = when (activeSensor.sensorSource) {
-                SensorSource.PHONE_MAGNETOMETER -> Icons.Default.PhoneAndroid to "Phone Sensor"
-                SensorSource.EXTERNAL_BLUETOOTH_BLE -> Icons.Default.Bluetooth to "BLE Hardware"
-                SensorSource.EXTERNAL_USB_OTG -> Icons.Default.Usb to "USB Serial"
-                SensorSource.DEVELOPER_SIMULATION_MODE -> Icons.Default.BugReport to "TEST MODE"
-            }
-
-            val statusColor = when {
-                !isDetecting -> TextSecondary
-                connectionStatus == ConnectionStatus.CONNECTED -> EmeraldSignal
-                connectionStatus == ConnectionStatus.CONNECTING -> AmberRadar
-                else -> CrimsonAlert
-            }
-
-            Box(
+            // Language Quick Switcher Pill
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .size(8.dp)
-                    .background(statusColor, CircleShape)
-            )
-            Spacer(modifier = Modifier.width(6.dp))
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = TextPrimary,
-                modifier = Modifier.size(14.dp)
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = label,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Medium,
-                color = TextPrimary,
-                fontFamily = FontFamily.Monospace
-            )
+                    .background(CyanGlow.copy(alpha = 0.15f), RoundedCornerShape(16.dp))
+                    .border(1.dp, CyanGlow.copy(alpha = 0.4f), RoundedCornerShape(16.dp))
+                    .clickable { onToggleLanguage() }
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .testTag("lang_toggle_btn")
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Language,
+                    contentDescription = "Language",
+                    tint = CyanGlow,
+                    modifier = Modifier.size(14.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = if (isArabic) "🇸🇦 عربي" else "🇺🇸 EN",
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = CyanGlow
+                )
+            }
+
+            // Active Sensor Pill
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .background(DetectorDarkBg, RoundedCornerShape(16.dp))
+                    .border(1.dp, DetectorSurfaceBorder, RoundedCornerShape(16.dp))
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                val (icon, label) = when (activeSensor.sensorSource) {
+                    SensorSource.PHONE_MAGNETOMETER -> Icons.Default.PhoneAndroid to AppStrings.sensorPhone(isArabic)
+                    SensorSource.EXTERNAL_BLUETOOTH_BLE -> Icons.Default.Bluetooth to AppStrings.sensorBle(isArabic)
+                    SensorSource.EXTERNAL_USB_OTG -> Icons.Default.Usb to AppStrings.sensorUsb(isArabic)
+                    SensorSource.DEVELOPER_SIMULATION_MODE -> Icons.Default.BugReport to AppStrings.sensorSim(isArabic)
+                }
+
+                val statusColor = when {
+                    !isDetecting -> TextSecondary
+                    connectionStatus == ConnectionStatus.CONNECTED -> EmeraldSignal
+                    connectionStatus == ConnectionStatus.CONNECTING -> AmberRadar
+                    else -> CrimsonAlert
+                }
+
+                Box(
+                    modifier = Modifier
+                        .size(6.dp)
+                        .background(statusColor, CircleShape)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = TextPrimary,
+                    modifier = Modifier.size(12.dp)
+                )
+                Spacer(modifier = Modifier.width(3.dp))
+                Text(
+                    text = label,
+                    fontSize = 9.5.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = TextPrimary
+                )
+            }
         }
     }
 }

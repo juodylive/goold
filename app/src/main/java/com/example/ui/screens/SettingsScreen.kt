@@ -21,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Vibration
@@ -46,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.core.AppStrings
 import com.example.core.DetectionMode
 import com.example.core.ToneType
 import com.example.core.VibrationMode
@@ -68,6 +70,8 @@ fun SettingsScreen(
     val audioConfig by viewModel.audioConfig.collectAsStateWithLifecycle()
     val vibrationConfig by viewModel.vibrationConfig.collectAsStateWithLifecycle()
     val expertSettings by viewModel.expertSettings.collectAsStateWithLifecycle()
+    val appLanguage by viewModel.appLanguage.collectAsStateWithLifecycle()
+    val isAr = appLanguage == "ar"
 
     val scrollState = rememberScrollState()
 
@@ -81,12 +85,67 @@ fun SettingsScreen(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         Text(
-            text = "DETECTION MODES & INSTRUMENT SETTINGS",
+            text = AppStrings.settingsScreenTitle(isAr),
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = TextPrimary
             )
         )
+
+        // 0. Language Switcher Card
+        Card(
+            modifier = Modifier.fillMaxWidth().testTag("language_settings_card"),
+            colors = CardDefaults.cardColors(containerColor = DetectorSurfaceCard),
+            shape = RoundedCornerShape(12.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, DetectorSurfaceBorder)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Language,
+                        contentDescription = null,
+                        tint = CyanGlow,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = AppStrings.languageTitle(isAr),
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            color = CyanGlow,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    FilterChip(
+                        selected = isAr,
+                        onClick = { viewModel.setLanguage("ar") },
+                        label = { Text("العربية (Arabic)", fontWeight = if (isAr) FontWeight.Bold else FontWeight.Normal) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = CyanGlow.copy(alpha = 0.25f),
+                            selectedLabelColor = CyanGlow
+                        ),
+                        modifier = Modifier.weight(1f)
+                    )
+                    FilterChip(
+                        selected = !isAr,
+                        onClick = { viewModel.setLanguage("en") },
+                        label = { Text("English", fontWeight = if (!isAr) FontWeight.Bold else FontWeight.Normal) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = CyanGlow.copy(alpha = 0.25f),
+                            selectedLabelColor = CyanGlow
+                        ),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        }
 
         // 1. Detection Mode Selector Card
         Card(
@@ -105,7 +164,7 @@ fun SettingsScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "OPERATING PRESET MODES",
+                        text = AppStrings.detectionModesSection(isAr),
                         style = MaterialTheme.typography.labelMedium.copy(
                             color = AmberRadar,
                             fontWeight = FontWeight.Bold
@@ -117,6 +176,8 @@ fun SettingsScreen(
 
                 DetectionMode.entries.forEach { mode ->
                     val isSelected = currentMode == mode
+                    val title = AppStrings.modeTitle(mode, isAr)
+                    val desc = AppStrings.modeDesc(mode, isAr)
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -145,13 +206,13 @@ fun SettingsScreen(
                         Spacer(modifier = Modifier.width(10.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = mode.title,
+                                text = title,
                                 fontWeight = FontWeight.Bold,
                                 color = if (isSelected) TextPrimary else TextSecondary,
                                 fontSize = 13.sp
                             )
                             Text(
-                                text = mode.description,
+                                text = desc,
                                 fontSize = 11.sp,
                                 color = TextSecondary
                             )
@@ -183,7 +244,7 @@ fun SettingsScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "AUDIO FEEDBACK SYNTHESIZER",
+                            text = AppStrings.audioSynthSection(isAr),
                             style = MaterialTheme.typography.labelMedium.copy(
                                 color = CyanGlow,
                                 fontWeight = FontWeight.Bold
@@ -206,7 +267,7 @@ fun SettingsScreen(
 
                 if (audioConfig.isEnabled) {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "Tone Synthesis Mode", fontSize = 11.sp, color = TextSecondary)
+                    Text(text = AppStrings.toneSynthesisMode(isAr), fontSize = 11.sp, color = TextSecondary)
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Row(
@@ -218,7 +279,7 @@ fun SettingsScreen(
                             FilterChip(
                                 selected = isSelected,
                                 onClick = { viewModel.updateAudioConfig(audioConfig.copy(toneType = tone)) },
-                                label = { Text(tone.name.replace("_", " "), fontSize = 10.sp) },
+                                label = { Text(AppStrings.toneName(tone, isAr), fontSize = 10.sp) },
                                 colors = FilterChipDefaults.filterChipColors(
                                     selectedContainerColor = CyanGlow.copy(alpha = 0.2f),
                                     selectedLabelColor = CyanGlow
@@ -235,7 +296,7 @@ fun SettingsScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Volume", fontSize = 11.sp, color = TextSecondary)
+                        Text(text = AppStrings.volume(isAr), fontSize = 11.sp, color = TextSecondary)
                         Text(text = "${(audioConfig.volume * 100).toInt()}%", fontSize = 11.sp, color = CyanGlow, fontFamily = FontFamily.Monospace)
                     }
                     Slider(
@@ -250,7 +311,7 @@ fun SettingsScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Mute Threshold (Min Signal %)", fontSize = 11.sp, color = TextSecondary)
+                        Text(text = AppStrings.muteThreshold(isAr), fontSize = 11.sp, color = TextSecondary)
                         Text(text = "${audioConfig.minSignalThresholdPct.toInt()}%", fontSize = 11.sp, color = CyanGlow, fontFamily = FontFamily.Monospace)
                     }
                     Slider(
@@ -285,7 +346,7 @@ fun SettingsScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = "HAPTIC / VIBRATION FEEDBACK",
+                            text = AppStrings.vibrationSection(isAr),
                             style = MaterialTheme.typography.labelMedium.copy(
                                 color = EmeraldSignal,
                                 fontWeight = FontWeight.Bold
@@ -308,7 +369,7 @@ fun SettingsScreen(
 
                 if (vibrationConfig.isEnabled) {
                     Spacer(modifier = Modifier.height(10.dp))
-                    Text(text = "Haptic Vibration Pattern", fontSize = 11.sp, color = TextSecondary)
+                    Text(text = AppStrings.vibrationPattern(isAr), fontSize = 11.sp, color = TextSecondary)
                     Spacer(modifier = Modifier.height(6.dp))
 
                     VibrationMode.entries.filter { it != VibrationMode.OFF }.forEach { vMode ->
@@ -327,20 +388,15 @@ fun SettingsScreen(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(8.dp)
-                                    .background(
-                                        if (isSelected) EmeraldSignal else DetectorSurfaceBorder,
-                                        CircleShape
-                                    )
+                                .size(8.dp)
+                                .background(
+                                    if (isSelected) EmeraldSignal else DetectorSurfaceBorder,
+                                    CircleShape
+                                )
                             )
                             Spacer(modifier = Modifier.width(10.dp))
                             Text(
-                                text = when (vMode) {
-                                    VibrationMode.PROPORTIONAL_PULSE -> "Proportional Pulse (Fast pulsing as signal rises)"
-                                    VibrationMode.CONTINUOUS_INTENSITY -> "Continuous Variable Intensity"
-                                    VibrationMode.SHORT_PULSE -> "Single Pulse on Threshold Trigger"
-                                    VibrationMode.OFF -> "Off"
-                                },
+                                text = AppStrings.vibrationModeName(vMode, isAr),
                                 fontSize = 12.sp,
                                 color = if (isSelected) TextPrimary else TextSecondary
                             )
@@ -367,7 +423,7 @@ fun SettingsScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "EXPERT SIGNAL FILTER PARAMETERS",
+                        text = AppStrings.expertSection(isAr),
                         style = MaterialTheme.typography.labelMedium.copy(
                             color = AmberRadar,
                             fontWeight = FontWeight.Bold
@@ -382,7 +438,7 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "IIR Filter Smoothing Alpha (α)", fontSize = 11.sp, color = TextSecondary)
+                    Text(text = AppStrings.filterAlpha(isAr), fontSize = 11.sp, color = TextSecondary)
                     Text(text = String.format("%.2f", expertSettings.filterAlpha), fontSize = 11.sp, color = AmberRadar, fontFamily = FontFamily.Monospace)
                 }
                 Slider(
@@ -399,8 +455,8 @@ fun SettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(text = "Continuous Drift Compensation", fontSize = 12.sp, color = TextPrimary, fontWeight = FontWeight.SemiBold)
-                        Text(text = "Slowly tracks background geomagnetic shifts", fontSize = 10.sp, color = TextSecondary)
+                        Text(text = AppStrings.driftCompTitle(isAr), fontSize = 12.sp, color = TextPrimary, fontWeight = FontWeight.SemiBold)
+                        Text(text = AppStrings.driftCompDesc(isAr), fontSize = 10.sp, color = TextSecondary)
                     }
                     Switch(
                         checked = expertSettings.continuousDriftComp,

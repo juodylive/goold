@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.core.AppStrings
 import com.example.ui.theme.CyanGlow
 import com.example.ui.theme.DetectorSurfaceBorder
 import com.example.ui.theme.DetectorSurfaceCard
@@ -41,6 +42,7 @@ import com.example.ui.theme.TextSecondary
 
 @Composable
 fun HonestDisclaimerBanner(
+    isArabic: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -71,7 +73,7 @@ fun HonestDisclaimerBanner(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Physics & Sensor Accuracy Notice",
+                    text = AppStrings.disclaimerTitle(isArabic),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontSize = 13.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -91,7 +93,7 @@ fun HonestDisclaimerBanner(
         AnimatedVisibility(visible = isExpanded) {
             Column(modifier = Modifier.padding(top = 8.dp)) {
                 Text(
-                    text = "• Built-In Phone Magnetometer: Measures geomagnetic flux (µT) in 3 dimensions. Highly sensitive to ferromagnetic materials (iron, steel, neodymium magnets, power lines). It cannot physically detect or discriminate non-ferrous metals such as gold, silver, or copper.\n\n• External Hardware Sensor Mode: Connecting an external search coil or pulse-induction/VLF detector via BLE/USB allows receiving true conductivity, phase angle, and Target ID (VDI).\n\n• Safety Notice: All displayed classifications are empirical signal estimates and never scientifically guaranteed.",
+                    text = AppStrings.disclaimerBody(isArabic),
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = TextSecondary,
                         lineHeight = 18.sp

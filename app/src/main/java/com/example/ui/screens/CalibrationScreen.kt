@@ -25,11 +25,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -45,8 +42,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -58,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.calibration.CalibrationQuality
 import com.example.calibration.CalibrationStep
+import com.example.core.AppStrings
 import com.example.ui.theme.AmberRadar
 import com.example.ui.theme.CrimsonAlert
 import com.example.ui.theme.CyanGlow
@@ -84,6 +80,8 @@ fun CalibrationScreen(
     val statusText by calibrationManager.statusText.collectAsStateWithLifecycle()
     val lastResult by calibrationManager.lastResult.collectAsStateWithLifecycle()
     val expertSettings by viewModel.expertSettings.collectAsStateWithLifecycle()
+    val appLanguage by viewModel.appLanguage.collectAsStateWithLifecycle()
+    val isAr = appLanguage == "ar"
 
     val scrollState = rememberScrollState()
 
@@ -98,7 +96,7 @@ fun CalibrationScreen(
     ) {
         // Header
         Text(
-            text = "SENSOR CALIBRATION & SELF-TEST",
+            text = AppStrings.calibScreenTitle(isAr),
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = TextPrimary
@@ -125,7 +123,7 @@ fun CalibrationScreen(
                 )
 
                 Text(
-                    text = "Guided Calibration Procedure",
+                    text = AppStrings.calibMotionGuide(isAr),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold,
                         color = AmberRadar
@@ -135,7 +133,7 @@ fun CalibrationScreen(
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = "Move the phone away from metal objects and slowly rotate it through different orientations in a figure-8 motion.",
+                    text = AppStrings.calibMotionDesc(isAr),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = TextSecondary,
                         lineHeight = 20.sp
@@ -158,8 +156,14 @@ fun CalibrationScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                val localizedStatus = when (currentStep) {
+                    CalibrationStep.IDLE -> if (isAr) "جاهز لبدء المعايرة" else "Ready to Calibrate"
+                    CalibrationStep.COMPLETED -> AppStrings.calibComplete(isAr)
+                    else -> AppStrings.calibProgress(isAr) + " (${(progressPct * 100).toInt()}%)"
+                }
+
                 Text(
-                    text = statusText,
+                    text = localizedStatus,
                     style = MaterialTheme.typography.labelMedium.copy(
                         color = CyanGlow,
                         fontFamily = FontFamily.Monospace
@@ -193,7 +197,7 @@ fun CalibrationScreen(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = if (currentStep == CalibrationStep.COMPLETED) "RE-CALIBRATE SENSOR" else "START GUIDED CALIBRATION",
+                        text = if (currentStep == CalibrationStep.COMPLETED) (if (isAr) "إعادة معايرة المستشعر" else "RE-CALIBRATE SENSOR") else (if (isAr) "بدء المعايرة الذاتية" else "START GUIDED CALIBRATION"),
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.sp
                     )
@@ -201,7 +205,7 @@ fun CalibrationScreen(
             }
         }
 
-        // 10-Step Workflow Status Checklist
+        // 9-Step Workflow Status Checklist
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = DetectorSurfaceCard),
@@ -210,21 +214,21 @@ fun CalibrationScreen(
         ) {
             Column(modifier = Modifier.padding(14.dp)) {
                 Text(
-                    text = "CALIBRATION PIPELINE PROTOCOL",
+                    text = AppStrings.calibActiveProcess(isAr),
                     style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary, letterSpacing = 1.sp)
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
                 val steps = listOf(
-                    "1. Sensor hardware registers self-test",
-                    "2. Ambient geomagnetic field baseline capture",
-                    "3. Multi-sample spatial figure-8 acquisition",
-                    "4. Geometric mean baseline calculation",
-                    "5. Noise floor variance & standard deviation analysis",
-                    "6. Dynamic signal trigger threshold determination",
-                    "7. Thermal & environmental drift tracking configuration",
-                    "8. Sensitivity coefficient optimization",
-                    "9. Sensor accuracy & calibration quality assessment"
+                    AppStrings.calibStep1(isAr),
+                    AppStrings.calibStep2(isAr),
+                    AppStrings.calibStep3(isAr),
+                    AppStrings.calibStep4(isAr),
+                    AppStrings.calibStep5(isAr),
+                    AppStrings.calibStep6(isAr),
+                    AppStrings.calibStep7(isAr),
+                    AppStrings.calibStep8(isAr),
+                    AppStrings.calibStep9(isAr)
                 )
 
                 steps.forEachIndexed { index, stepName ->
@@ -270,7 +274,7 @@ fun CalibrationScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "CALIBRATION REPORT",
+                            text = if (isAr) "تقرير المعايرة" else "CALIBRATION REPORT",
                             style = MaterialTheme.typography.labelSmall.copy(color = EmeraldSignal, letterSpacing = 1.sp)
                         )
                         val qualityBadgeColor = when (res.quality) {
@@ -278,8 +282,13 @@ fun CalibrationScreen(
                             CalibrationQuality.GOOD -> AmberRadar
                             CalibrationQuality.POOR -> CrimsonAlert
                         }
+                        val qualityName = when (res.quality) {
+                            CalibrationQuality.EXCELLENT -> if (isAr) "ممتاز" else "EXCELLENT"
+                            CalibrationQuality.GOOD -> if (isAr) "جيد" else "GOOD"
+                            CalibrationQuality.POOR -> if (isAr) "ضعيف" else "POOR"
+                        }
                         Text(
-                            text = res.quality.name,
+                            text = qualityName,
                             style = MaterialTheme.typography.labelLarge.copy(
                                 color = qualityBadgeColor,
                                 fontWeight = FontWeight.Bold
@@ -297,15 +306,15 @@ fun CalibrationScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
-                            Text("Calibrated Baseline", fontSize = 11.sp, color = TextSecondary)
+                            Text(if (isAr) "خط الأساس" else "Calibrated Baseline", fontSize = 11.sp, color = TextSecondary)
                             Text("${String.format(Locale.US, "%.1f", res.baselineUt)} µT", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary, fontFamily = FontFamily.Monospace)
                         }
                         Column {
-                            Text("Noise Floor (σ)", fontSize = 11.sp, color = TextSecondary)
+                            Text(if (isAr) "مستوى الضوضاء (σ)" else "Noise Floor (σ)", fontSize = 11.sp, color = TextSecondary)
                             Text("±${String.format(Locale.US, "%.2f", res.noiseFloorUt)} µT", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = CyanGlow, fontFamily = FontFamily.Monospace)
                         }
                         Column {
-                            Text("Trigger Threshold", fontSize = 11.sp, color = TextSecondary)
+                            Text(if (isAr) "عتبة التنبيه" else "Trigger Threshold", fontSize = 11.sp, color = TextSecondary)
                             Text("${String.format(Locale.US, "%.1f", res.recommendedThresholdUt)} µT", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = AmberRadar, fontFamily = FontFamily.Monospace)
                         }
                     }
@@ -326,7 +335,7 @@ fun CalibrationScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "MANUAL SENSITIVITY ADJUSTMENT",
+                        text = if (isAr) "ضبط الحساسية اليدوية" else "MANUAL SENSITIVITY ADJUSTMENT",
                         style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
                     )
                     Text(
@@ -352,7 +361,7 @@ fun CalibrationScreen(
                 )
 
                 Text(
-                    text = "Higher sensitivity detects smaller anomalies but may increase sensitivity to device movement.",
+                    text = if (isAr) "الحساسية العالية ترصد الأهداف الصغيرة والبعيدة، لكن قد تتأثر بحركة اليد السريعة." else "Higher sensitivity detects smaller anomalies but may increase sensitivity to device movement.",
                     style = MaterialTheme.typography.bodySmall.copy(color = TextSecondary)
                 )
             }
