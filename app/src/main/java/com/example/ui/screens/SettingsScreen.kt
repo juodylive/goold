@@ -21,6 +21,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Campaign
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
@@ -28,6 +30,8 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material.icons.filled.VolumeUp
+import com.example.ads.AdConfig
+import com.example.ads.AdMobManager
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
@@ -465,6 +469,102 @@ fun SettingsScreen(
                         onCheckedChange = { viewModel.updateExpertSettings(expertSettings.copy(continuousDriftComp = it)) },
                         colors = SwitchDefaults.colors(checkedThumbColor = AmberRadar, checkedTrackColor = AmberRadar.copy(alpha = 0.3f))
                     )
+                }
+            }
+        }
+
+        // 5. Monetization & Google AdMob Integration Card
+        Card(
+            modifier = Modifier.fillMaxWidth().testTag("admob_settings_card"),
+            colors = CardDefaults.cardColors(containerColor = DetectorSurfaceCard),
+            shape = RoundedCornerShape(12.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, DetectorSurfaceBorder)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Campaign,
+                        contentDescription = null,
+                        tint = CyanGlow,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = AppStrings.adSettingsTitle(appLanguage),
+                        style = MaterialTheme.typography.labelMedium.copy(
+                            color = CyanGlow,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = AppStrings.adSettingsDesc(appLanguage),
+                    style = MaterialTheme.typography.bodySmall.copy(color = TextSecondary)
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Collapsible Banner Toggle
+                val isBannerCollapsed by AdMobManager.isBannerCollapsed.collectAsStateWithLifecycle()
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = AppStrings.collapsibleBannerToggle(appLanguage),
+                            fontSize = 12.sp,
+                            color = TextPrimary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                    Switch(
+                        checked = !isBannerCollapsed,
+                        onCheckedChange = { isExpanded ->
+                            AdMobManager.setBannerCollapsed(!isExpanded)
+                        },
+                        colors = SwitchDefaults.colors(checkedThumbColor = CyanGlow, checkedTrackColor = CyanGlow.copy(alpha = 0.3f))
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Interstitial Information Box
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(DetectorDarkBg, RoundedCornerShape(8.dp))
+                        .border(1.dp, DetectorSurfaceBorder, RoundedCornerShape(8.dp))
+                        .padding(10.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.Top) {
+                        Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = EmeraldSignal,
+                            modifier = Modifier.size(16.dp).padding(top = 2.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Column {
+                            Text(
+                                text = AppStrings.interstitialFrequencyInfo(appLanguage),
+                                fontSize = 11.sp,
+                                color = TextPrimary,
+                                lineHeight = 16.sp
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = AppStrings.adStatusReady(appLanguage),
+                                fontSize = 10.sp,
+                                color = TextSecondary,
+                                lineHeight = 14.sp
+                            )
+                        }
+                    }
                 }
             }
         }

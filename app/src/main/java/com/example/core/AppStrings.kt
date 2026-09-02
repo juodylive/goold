@@ -693,4 +693,56 @@ object AppStrings {
         else -> "$count recorded detection events"
     }
     fun deleteAll(lang: String) = resolve(lang, "مسح الكل", "Delete All", "Alle löschen", "Eliminar Todo", "Excluir Tudo", "Tout supprimer", "Tümünü Sil")
+
+    // AdMob & Monetization Strings
+    fun adSettingsTitle(lang: String) = resolve(
+        lang,
+        "إعدادات الإعلانات (Google AdMob)",
+        "Monetization & Ads (Google AdMob)",
+        "Monetarisierung & Werbung (AdMob)",
+        "Monetización y Anuncios (AdMob)",
+        "Monetização e Anúncios (AdMob)",
+        "Monétisation et Annonces (AdMob)",
+        "Para Kazanma ve Reklamlar (AdMob)"
+    )
+    fun adSettingsDesc(lang: String) = resolve(
+        lang,
+        "إعلان بانر سفلي قابل للطي وإعلانات بينية ذكية متوازنة لا تقاطع البحث",
+        "Collapsible bottom banner & smart, non-intrusive interstitial ads",
+        "Einklappbares Banner und intelligente, unaufdringliche Interstitial-Anzeigen",
+        "Banner inferior plegable y anuncios intersticiales inteligentes y discretos",
+        "Banner inferior recolhível e anúncios intersticiais inteligentes e discretos",
+        "Bannière inférieure pliable et annonces interstitielles discrètes et intelligentes",
+        "Daraltılabilir alt başlık ve akıllı, rahatsız etmeyen geçiş reklamları"
+    )
+    fun collapsibleBannerToggle(lang: String) = resolve(
+        lang,
+        "البانر السفلي القابل للطي",
+        "Collapsible Bottom Banner",
+        "Einklappbares Unteres Banner",
+        "Banner Inferior Plegable",
+        "Banner Inferior Recolhível",
+        "Bannière Inférieure Pliable",
+        "Daraltılabilir Alt Başlık"
+    )
+    fun interstitialFrequencyInfo(lang: String) = resolve(
+        lang,
+        "نظام الإعلانات البينية الذكي: متباعدة بفاصل 4 تنقلات أو 90 ثانية، وتتوقف فوراً أثناء جلسات الكشف النشطة.",
+        "Smart Interstitial System: Paced every 4 screen switches / 90s, automatically paused during active detection.",
+        "Smartes Interstitial-System: Alle 4 Wechsel / 90s, pausiert automatisch während der aktiven Suche.",
+        "Sistema Intersticial Inteligente: Cada 4 cambios / 90s, pausado durante la detección activa.",
+        "Sistema Intersticial Inteligente: A cada 4 trocas / 90s, pausado durante a detecção ativa.",
+        "Système Interstitiel Intelligent: Toutes les 4 transitions / 90s, mis en pause pendant la détection.",
+        "Akıllı Geçiş Sistemi: Her 4 ekran değişiminde / 90 sn'de bir, aktif tarama sırasında otomatik duraklatılır."
+    )
+    fun adStatusReady(lang: String) = resolve(
+        lang,
+        "Google AdMob Test Unit جاهز ومُدمج (يمكن استبداله بمعرفاتك الحية عند النشر)",
+        "Google AdMob Test Units integrated & ready for live unit replacement",
+        "Google AdMob Test-IDs integriert und bereit für Live-IDs",
+        "IDs de prueba AdMob integradas y listas para producción",
+        "IDs de teste AdMob integrados e prontos para produção",
+        "Unités de test AdMob intégrées et prêtes pour la production",
+        "Google AdMob Test Birimleri entegre ve canlı yayın için hazır"
+    )
 }

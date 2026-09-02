@@ -1,5 +1,6 @@
 package com.example
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,7 +8,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -28,6 +31,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.LayoutDirection
@@ -40,6 +44,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.ads.AdMobManager
+import com.example.ads.CollapsibleBannerAd
 import com.example.core.AppStrings
 import com.example.ui.components.TopDetectorAppBar
 import com.example.ui.screens.CalibrationScreen
@@ -68,6 +74,7 @@ sealed class AppNavDestination(val route: String, val title: String, val icon: I
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AdMobManager.initialize(applicationContext)
         enableEdgeToEdge()
         setContent {
             MetalScanProTheme {
@@ -84,6 +91,7 @@ data class NavItem(val route: String, val getTitle: (String) -> String, val icon
 fun MetalScanProApp(
     viewModel: DetectorViewModel
 ) {
+    val context = LocalContext.current
     val appLanguage by viewModel.appLanguage.collectAsStateWithLifecycle()
     val isAr = appLanguage == "ar"
     val layoutDirection = if (isAr) LayoutDirection.Rtl else LayoutDirection.Ltr
@@ -118,52 +126,62 @@ fun MetalScanProApp(
                 )
             },
             bottomBar = {
-                NavigationBar(
-                    containerColor = DetectorSurfaceDark,
-                    tonalElevation = 0.dp,
-                    modifier = Modifier
-                        .border(1.dp, DetectorSurfaceBorder)
-                        .testTag("main_navigation_bar")
-                ) {
-                    navItems.forEach { item ->
-                        val isSelected = currentRoute == item.route
-                        val title = item.getTitle(appLanguage)
-                        NavigationBarItem(
-                            selected = isSelected,
-                            onClick = {
-                                if (currentRoute != item.route) {
-                                    navController.navigate(item.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    // Collapsible Banner Ad above Bottom Navigation Bar
+                    CollapsibleBannerAd(appLanguage = appLanguage)
+
+                    NavigationBar(
+                        containerColor = DetectorSurfaceDark,
+                        tonalElevation = 0.dp,
+                        modifier = Modifier
+                            .border(1.dp, DetectorSurfaceBorder)
+                            .testTag("main_navigation_bar")
+                    ) {
+                        navItems.forEach { item ->
+                            val isSelected = currentRoute == item.route
+                            val title = item.getTitle(appLanguage)
+                            NavigationBarItem(
+                                selected = isSelected,
+                                onClick = {
+                                    if (currentRoute != item.route) {
+                                        // Trigger non-intrusive interstitial ad if threshold/cooldown met
+                                        (context as? Activity)?.let { act ->
+                                            AdMobManager.onScreenTransition(act, isDetecting)
                                         }
-                                        launchSingleTop = true
-                                        restoreState = true
+
+                                        navController.navigate(item.route) {
+                                            popUpTo(navController.graph.findStartDestination().id) {
+                                                saveState = true
+                                            }
+                                            launchSingleTop = true
+                                            restoreState = true
+                                        }
                                     }
-                                }
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = item.icon,
-                                    contentDescription = title,
-                                    modifier = Modifier.size(22.dp)
-                                )
-                            },
-                            label = {
-                                Text(
-                                    text = title,
-                                    fontSize = 11.sp,
-                                    color = if (isSelected) AmberRadar else TextSecondary
-                                )
-                            },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = AmberRadar,
-                                selectedTextColor = AmberRadar,
-                                unselectedIconColor = TextSecondary,
-                                unselectedTextColor = TextSecondary,
-                                indicatorColor = AmberRadar.copy(alpha = 0.15f)
-                            ),
-                            modifier = Modifier.testTag(item.tag)
-                        )
+                                },
+                                icon = {
+                                    Icon(
+                                        imageVector = item.icon,
+                                        contentDescription = title,
+                                        modifier = Modifier.size(22.dp)
+                                    )
+                                },
+                                label = {
+                                    Text(
+                                        text = title,
+                                        fontSize = 11.sp,
+                                        color = if (isSelected) AmberRadar else TextSecondary
+                                    )
+                                },
+                                colors = NavigationBarItemDefaults.colors(
+                                    selectedIconColor = AmberRadar,
+                                    selectedTextColor = AmberRadar,
+                                    unselectedIconColor = TextSecondary,
+                                    unselectedTextColor = TextSecondary,
+                                    indicatorColor = AmberRadar.copy(alpha = 0.15f)
+                                ),
+                                modifier = Modifier.testTag(item.tag)
+                            )
+                        }
                     }
                 }
             },
