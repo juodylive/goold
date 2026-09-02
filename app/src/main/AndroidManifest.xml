@@ -54,7 +54,7 @@
         <!-- Google AdMob Application ID (Sample ID for dev/testing, replace with your production AdMob App ID in Google Play) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-5660393455301038~6401404113"/>
     </application>
 
 </manifest>
