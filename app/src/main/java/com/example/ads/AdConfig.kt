@@ -7,8 +7,8 @@ package com.example.ads
  */
 object AdConfig {
     // Official Google AdMob Test Ad Unit IDs
-    const val TEST_BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/6300978111"
-    const val TEST_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
+    const val TEST_BANNER_AD_UNIT_ID = "ca-app-pub-5660393455301038/8262999328"
+    const val TEST_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-5660393455301038/4692736623"
     
     // Set to your live production Ad Unit IDs when publishing
     var bannerAdUnitId: String = TEST_BANNER_AD_UNIT_ID
