@@ -1,0 +1,6 @@
+{
+  "name": "MetalScan Pro",
+  "description": "Professional metal detector and magnetic anomaly analyzer for phone magnetometer and external hardware sensors.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

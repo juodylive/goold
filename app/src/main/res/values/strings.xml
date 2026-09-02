@@ -1,0 +1,99 @@
+<resources>
+    <string name="app_name">MetalScan Pro</string>
+    <string name="nav_detect">Detect</string>
+    <string name="nav_calibration">Calibrate</string>
+    <string name="nav_devices">Devices</string>
+    <string name="nav_history">History</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Detection Screen -->
+    <string name="title_detector">Real-Time Detector</string>
+    <string name="label_phone_mode">PHONE MAGNETOMETER</string>
+    <string name="label_external_mode">EXTERNAL HARDWARE SENSOR</string>
+    <string name="label_sim_mode">TEST SIMULATION MODE</string>
+    <string name="label_current_field">Current Field</string>
+    <string name="label_baseline">Baseline</string>
+    <string name="label_delta">Delta (Δ)</string>
+    <string name="label_signal_strength">Signal Strength</string>
+    <string name="label_stability">Stability</string>
+    <string name="label_confidence">Confidence</string>
+    <string name="label_snr">SNR</string>
+    <string name="label_classification">Target Classification</string>
+    <string name="btn_start_detection">START SCAN</string>
+    <string name="btn_stop_detection">STOP SCAN</string>
+    <string name="btn_calibrate">CALIBRATE</string>
+    <string name="btn_reset_baseline">ZERO BASELINE</string>
+    <string name="btn_save_event">LOG DETECTION</string>
+    <string name="dialog_save_title">Save Detection Log</string>
+    <string name="dialog_save_notes_hint">Add field notes (e.g. Depth ~10cm, under tree)...</string>
+    <string name="dialog_save_confirm">Save to History</string>
+    <string name="dialog_cancel">Cancel</string>
+
+    <!-- Calibration -->
+    <string name="title_calibration">Sensor Calibration &amp; Self-Test</string>
+    <string name="calib_step_1">1. Sensor Self-Test</string>
+    <string name="calib_step_2">2. Measure Ambient Field</string>
+    <string name="calib_step_3">3. Multi-Point Sampling</string>
+    <string name="calib_step_4">4. Compute Geometric Baseline</string>
+    <string name="calib_step_5">5. Analyze Noise Floor &amp; Variance</string>
+    <string name="calib_step_6">6. Calculate Dynamic Threshold</string>
+    <string name="calib_step_7">7. Environmental Drift Compensation</string>
+    <string name="calib_step_8">8. Sensitivity Adjustment</string>
+    <string name="calib_step_9">9. Calibration Quality Assessment</string>
+    <string name="calib_guide_instruction">Move the phone away from metal objects and slowly rotate it through different orientations in a figure-8 motion.</string>
+    <string name="calib_quality_excellent">EXCELLENT (Low Noise, Optimal)</string>
+    <string name="calib_quality_good">GOOD (Minor Noise Detected)</string>
+    <string name="calib_quality_poor">POOR (High Interference)</string>
+    <string name="calib_btn_start">Start Guided Calibration</string>
+    <string name="calib_btn_applying">Calibrating...</string>
+    <string name="calib_btn_complete">Calibration Complete</string>
+
+    <!-- Hardware & Devices -->
+    <string name="title_devices">External Hardware Sensors</string>
+    <string name="ble_section_title">Bluetooth Low Energy (BLE)</string>
+    <string name="ble_scan_button">Scan for BLE Detectors</string>
+    <string name="ble_stop_scan">Stop Scanning</string>
+    <string name="ble_no_devices">No BLE metal detectors found in range.</string>
+    <string name="usb_section_title">USB OTG / Serial Interface</string>
+    <string name="usb_status_connected">USB Hardware Connected</string>
+    <string name="usb_status_disconnected">No USB Detector Detected</string>
+    <string name="usb_btn_connect">Connect USB Device</string>
+    <string name="proto_config_title">Telemetry Protocol</string>
+    <string name="proto_standard">Standard ASCII/NMEA Sentence ($MDDATA...)</string>
+    <string name="proto_json">JSON Telemetry Stream</string>
+    <string name="proto_binary">High-Speed Binary Frame</string>
+    <string name="sensor_simulation_toggle">Developer Test / Sensor Simulation Mode</string>
+    <string name="sensor_sim_warning">Test mode generates synthetic signals for algorithmic and UI verification only.</string>
+
+    <!-- History -->
+    <string name="title_history">Detection History &amp; Logs</string>
+    <string name="history_empty">No detection events saved yet. Tap "Log Detection" on the main scanner to record an anomaly.</string>
+    <string name="history_gps_location">GPS Coordinates</string>
+    <string name="history_peak">Peak Field</string>
+    <string name="history_duration">Duration</string>
+    <string name="history_clear_all">Clear All Logs</string>
+
+    <!-- Settings & Modes -->
+    <string name="title_settings">Detector Configuration &amp; Modes</string>
+    <string name="mode_quick">Quick Scan (Instant Response)</string>
+    <string name="mode_deep">Deep Signal Analysis (Enhanced SNR)</string>
+    <string name="mode_ferrous">Ferrous Metal Focus</string>
+    <string name="mode_non_ferrous">Non-Ferrous Discrimination (External Hardware Only)</string>
+    <string name="mode_expert">Expert / Manual Mode</string>
+    <string name="setting_audio_toggle">Audio Tone Feedback</string>
+    <string name="setting_tone_type">Tone Mode</string>
+    <string name="setting_vibration_toggle">Haptic / Vibration Feedback</string>
+    <string name="setting_vibration_mode">Vibration Pattern</string>
+    <string name="setting_sensitivity">Detection Sensitivity</string>
+    <string name="setting_threshold">Anomaly Trigger Threshold</string>
+    <string name="setting_filter_alpha">Low-Pass Filter Strength</string>
+    <string name="setting_sampling_rate">Sampling Frequency (Hz)</string>
+    <string name="setting_env_compensation">Continuous Drift Compensation</string>
+    <string name="setting_audio_min_signal">Minimum Signal for Audio</string>
+    <string name="setting_audio_volume">Tone Volume</string>
+
+    <!-- Scientific Disclaimer -->
+    <string name="disclaimer_phone_limitation">Smartphones cannot reliably identify gold, silver, or copper using the built-in magnetometer alone. The built-in sensor measures geomagnetic field changes and primarily detects ferromagnetic materials and magnetic anomalies. Accurate non-ferrous discrimination requires a dedicated external metal detection coil sensor.</string>
+    <string name="disclaimer_not_guaranteed">All target classifications are mathematical estimates based on signal anomalies and are never scientifically guaranteed.</string>
+    <string name="no_magnetometer_error">This device lacks an internal magnetometer (hardware compass). You can connect an external BLE/USB detector or enable Developer Test Mode.</string>
+</resources>
