@@ -16,12 +16,67 @@ class TargetClassifier {
         reading: SensorReading,
         deltaUt: Float,
         thresholdUt: Float,
-        snrDb: Float
+        snrDb: Float,
+        goldSilverAnalysis: GoldSilverAnalysisResult? = null
     ): TargetClassification {
         val absDelta = abs(deltaUt)
 
-        if (absDelta < thresholdUt) {
+        if (absDelta < thresholdUt && goldSilverAnalysis?.targetCategory == PreciousMetalCategory.NONE) {
             return TargetClassification.Idle
+        }
+
+        // Check if iron notch filtered out this target
+        if (goldSilverAnalysis != null && goldSilverAnalysis.isIronFilteredOut) {
+            return TargetClassification(
+                type = TargetClassificationType.EXTERNAL_FERROUS,
+                title = "Ferrous Trash Rejected",
+                subtitle = "Iron notch filter actively rejected ferrous target",
+                isEstimatedOnly = true,
+                isExternalSensorRequired = false,
+                ferromagneticScore = 0.95f,
+                isIronFilteredOut = true
+            )
+        }
+
+        // If Gold was identified by the specialized algorithm
+        if (goldSilverAnalysis != null && (
+            goldSilverAnalysis.targetCategory == PreciousMetalCategory.GOLD_FINE_JEWELRY ||
+            goldSilverAnalysis.targetCategory == PreciousMetalCategory.GOLD_NUGGET_NATIVE ||
+            goldSilverAnalysis.targetCategory == PreciousMetalCategory.GOLD_COIN_SOLID
+        )) {
+            val isVerified = goldSilverAnalysis.isHardwareTelemetryVerified
+            return TargetClassification(
+                type = if (isVerified) TargetClassificationType.EXTERNAL_GOLD_LIKE_ESTIMATED else TargetClassificationType.PHONE_GOLD_TRANSIENT_ESTIMATED,
+                title = goldSilverAnalysis.materialSummary,
+                subtitle = "Gold Match: ${goldSilverAnalysis.goldProbabilityPct.toInt()}% | VDI: ${goldSilverAnalysis.estimatedVdi?.toInt() ?: "--"} | ${goldSilverAnalysis.conductivityRating}",
+                isEstimatedOnly = !isVerified,
+                isExternalSensorRequired = !isVerified,
+                conductivityVdi = goldSilverAnalysis.estimatedVdi,
+                phaseDeg = goldSilverAnalysis.estimatedPhaseDeg,
+                ferromagneticScore = 0.02f,
+                goldProbabilityPct = goldSilverAnalysis.goldProbabilityPct,
+                silverProbabilityPct = goldSilverAnalysis.silverProbabilityPct
+            )
+        }
+
+        // If Silver was identified by the specialized algorithm
+        if (goldSilverAnalysis != null && (
+            goldSilverAnalysis.targetCategory == PreciousMetalCategory.SILVER_JEWELRY_RELIC ||
+            goldSilverAnalysis.targetCategory == PreciousMetalCategory.SILVER_COIN_BULLION
+        )) {
+            val isVerified = goldSilverAnalysis.isHardwareTelemetryVerified
+            return TargetClassification(
+                type = if (isVerified) TargetClassificationType.EXTERNAL_SILVER_LIKE_ESTIMATED else TargetClassificationType.PHONE_SILVER_TRANSIENT_ESTIMATED,
+                title = goldSilverAnalysis.materialSummary,
+                subtitle = "Silver Match: ${goldSilverAnalysis.silverProbabilityPct.toInt()}% | VDI: ${goldSilverAnalysis.estimatedVdi?.toInt() ?: "--"} | ${goldSilverAnalysis.conductivityRating}",
+                isEstimatedOnly = !isVerified,
+                isExternalSensorRequired = !isVerified,
+                conductivityVdi = goldSilverAnalysis.estimatedVdi,
+                phaseDeg = goldSilverAnalysis.estimatedPhaseDeg,
+                ferromagneticScore = 0.01f,
+                goldProbabilityPct = goldSilverAnalysis.goldProbabilityPct,
+                silverProbabilityPct = goldSilverAnalysis.silverProbabilityPct
+            )
         }
 
         val isPhoneMode = reading.source == SensorSource.PHONE_MAGNETOMETER ||

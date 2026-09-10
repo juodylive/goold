@@ -60,6 +60,8 @@ fun TargetClassificationBadge(
         TargetClassificationType.EXTERNAL_NON_FERROUS_GENERAL -> NonFerrousGeneralColor
         TargetClassificationType.EXTERNAL_GOLD_LIKE_ESTIMATED -> GoldEstimatedColor
         TargetClassificationType.EXTERNAL_SILVER_LIKE_ESTIMATED -> SilverEstimatedColor
+        TargetClassificationType.PHONE_GOLD_TRANSIENT_ESTIMATED -> GoldEstimatedColor
+        TargetClassificationType.PHONE_SILVER_TRANSIENT_ESTIMATED -> SilverEstimatedColor
         TargetClassificationType.EXTERNAL_COPPER_LIKE_ESTIMATED -> CopperEstimatedColor
         TargetClassificationType.EXTERNAL_ALUMINUM_LIKE_ESTIMATED -> AluminumEstimatedColor
         TargetClassificationType.EXTERNAL_UNKNOWN -> AmberRadar
@@ -71,6 +73,8 @@ fun TargetClassificationBadge(
         TargetClassificationType.PHONE_STRONG_MAGNETIC_OBJECT -> AppStrings.classStrongAnomalyTitle(appLanguage)
         TargetClassificationType.PHONE_FERROUS_MAGNETIC -> AppStrings.classFerrousTitle(appLanguage)
         TargetClassificationType.PHONE_UNKNOWN_METALLIC_ANOMALY -> AppStrings.classUnknownMetallicTitle(appLanguage)
+        TargetClassificationType.PHONE_GOLD_TRANSIENT_ESTIMATED -> AppStrings.classPhoneGoldTitle(appLanguage)
+        TargetClassificationType.PHONE_SILVER_TRANSIENT_ESTIMATED -> AppStrings.classPhoneSilverTitle(appLanguage)
         TargetClassificationType.EXTERNAL_FERROUS -> AppStrings.classExtFerrousTitle(appLanguage)
         TargetClassificationType.EXTERNAL_NON_FERROUS_GENERAL -> AppStrings.classExtNonFerrousTitle(appLanguage)
         TargetClassificationType.EXTERNAL_GOLD_LIKE_ESTIMATED -> AppStrings.classExtGoldTitle(appLanguage)
@@ -86,6 +90,8 @@ fun TargetClassificationBadge(
         TargetClassificationType.PHONE_STRONG_MAGNETIC_OBJECT -> AppStrings.classStrongAnomalySub(appLanguage)
         TargetClassificationType.PHONE_FERROUS_MAGNETIC -> AppStrings.classFerrousSub(appLanguage)
         TargetClassificationType.PHONE_UNKNOWN_METALLIC_ANOMALY -> AppStrings.classUnknownMetallicSub(appLanguage)
+        TargetClassificationType.PHONE_GOLD_TRANSIENT_ESTIMATED -> AppStrings.classPhoneGoldSub(appLanguage)
+        TargetClassificationType.PHONE_SILVER_TRANSIENT_ESTIMATED -> AppStrings.classPhoneSilverSub(appLanguage)
         TargetClassificationType.EXTERNAL_FERROUS -> AppStrings.classExtFerrousSub(appLanguage)
         TargetClassificationType.EXTERNAL_NON_FERROUS_GENERAL -> AppStrings.classExtNonFerrousSub(appLanguage)
         TargetClassificationType.EXTERNAL_GOLD_LIKE_ESTIMATED -> AppStrings.classExtGoldSub(appLanguage)
@@ -152,6 +158,61 @@ fun TargetClassificationBadge(
             text = localizedSubtitle,
             style = MaterialTheme.typography.bodyMedium.copy(color = TextSecondary)
         )
+
+        if (classification.goldProbabilityPct > 0f || classification.silverProbabilityPct > 0f) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                if (classification.goldProbabilityPct > 0f) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(GoldEstimatedColor.copy(alpha = 0.12f), RoundedCornerShape(8.dp))
+                            .border(1.dp, GoldEstimatedColor.copy(alpha = 0.4f), RoundedCornerShape(8.dp))
+                            .padding(horizontal = 8.dp, vertical = 6.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = AppStrings.goldProbability(appLanguage),
+                                style = MaterialTheme.typography.labelSmall.copy(color = GoldEstimatedColor, fontWeight = FontWeight.Bold)
+                            )
+                            Text(
+                                text = "${classification.goldProbabilityPct.toInt()}%",
+                                style = MaterialTheme.typography.labelSmall.copy(color = GoldEstimatedColor, fontWeight = FontWeight.Bold)
+                            )
+                        }
+                    }
+                }
+                if (classification.silverProbabilityPct > 0f) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(SilverEstimatedColor.copy(alpha = 0.12f), RoundedCornerShape(8.dp))
+                            .border(1.dp, SilverEstimatedColor.copy(alpha = 0.4f), RoundedCornerShape(8.dp))
+                            .padding(horizontal = 8.dp, vertical = 6.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = AppStrings.silverProbability(appLanguage),
+                                style = MaterialTheme.typography.labelSmall.copy(color = SilverEstimatedColor, fontWeight = FontWeight.Bold)
+                            )
+                            Text(
+                                text = "${classification.silverProbabilityPct.toInt()}%",
+                                style = MaterialTheme.typography.labelSmall.copy(color = SilverEstimatedColor, fontWeight = FontWeight.Bold)
+                            )
+                        }
+                    }
+                }
+            }
+        }
 
         if (classification.isExternalSensorRequired) {
             Spacer(modifier = Modifier.height(6.dp))

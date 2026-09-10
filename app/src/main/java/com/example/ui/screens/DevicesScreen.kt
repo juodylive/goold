@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
@@ -71,6 +73,7 @@ import com.example.ui.theme.DetectorDarkBg
 import com.example.ui.theme.DetectorSurfaceBorder
 import com.example.ui.theme.DetectorSurfaceCard
 import com.example.ui.theme.EmeraldSignal
+import com.example.ui.theme.TextMuted
 import com.example.ui.theme.TextPrimary
 import com.example.ui.theme.TextSecondary
 import com.example.viewmodel.DetectorViewModel
@@ -542,6 +545,52 @@ fun DevicesScreen(
                                 checkedTrackColor = CyanGlow.copy(alpha = 0.3f)
                             )
                         )
+                    }
+
+                    if (simVdiEnabled) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Simulated Metal Target (Algorithm Test):",
+                            style = MaterialTheme.typography.labelSmall.copy(color = TextSecondary)
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            com.example.sensors.SimulatorMetalDetectorSensor.SimulatedTarget.entries.forEach { target ->
+                                val isSelected = simSensor.simulatedMetalType == target
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(6.dp))
+                                        .background(if (isSelected) CyanGlow.copy(alpha = 0.25f) else DetectorDarkBg)
+                                        .border(
+                                            1.dp,
+                                            if (isSelected) CyanGlow else DetectorSurfaceBorder,
+                                            RoundedCornerShape(6.dp)
+                                        )
+                                        .clickable {
+                                            simSensor.simulatedMetalType = target
+                                        }
+                                        .padding(horizontal = 6.dp, vertical = 4.dp)
+                                ) {
+                                    Text(
+                                        text = when (target) {
+                                            com.example.sensors.SimulatorMetalDetectorSensor.SimulatedTarget.GOLD_RING_TARGET -> "Gold (VDI 54)"
+                                            com.example.sensors.SimulatorMetalDetectorSensor.SimulatedTarget.SILVER_COIN_TARGET -> "Silver (VDI 91)"
+                                            com.example.sensors.SimulatorMetalDetectorSensor.SimulatedTarget.FERROUS_NAIL -> "Iron (VDI 15)"
+                                            com.example.sensors.SimulatorMetalDetectorSensor.SimulatedTarget.HIGH_CONDUCTIVITY_TARGET -> "High VDI 82"
+                                            com.example.sensors.SimulatorMetalDetectorSensor.SimulatedTarget.WEAK_ANOMALY -> "Alloy 35"
+                                            com.example.sensors.SimulatorMetalDetectorSensor.SimulatedTarget.RANDOM_CYCLE -> "Random"
+                                        },
+                                        style = MaterialTheme.typography.labelSmall.copy(
+                                            color = if (isSelected) CyanGlow else TextMuted,
+                                            fontSize = 9.sp
+                                        )
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }

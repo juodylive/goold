@@ -15,7 +15,11 @@ enum class TargetClassificationType {
     EXTERNAL_SILVER_LIKE_ESTIMATED,
     EXTERNAL_COPPER_LIKE_ESTIMATED,
     EXTERNAL_ALUMINUM_LIKE_ESTIMATED,
-    EXTERNAL_UNKNOWN
+    EXTERNAL_UNKNOWN,
+
+    // Dynamic Motion / Induction Classifications
+    PHONE_GOLD_TRANSIENT_ESTIMATED,
+    PHONE_SILVER_TRANSIENT_ESTIMATED
 }
 
 data class TargetClassification(
@@ -26,7 +30,10 @@ data class TargetClassification(
     val isExternalSensorRequired: Boolean = false,
     val conductivityVdi: Float? = null,
     val phaseDeg: Float? = null,
-    val ferromagneticScore: Float = 0f // 0.0 (non-magnetic) to 1.0 (strongly magnetic)
+    val ferromagneticScore: Float = 0f, // 0.0 (non-magnetic) to 1.0 (strongly magnetic)
+    val goldProbabilityPct: Float = 0f, // 0 to 100%
+    val silverProbabilityPct: Float = 0f, // 0 to 100%
+    val isIronFilteredOut: Boolean = false
 ) {
     companion object {
         val Idle = TargetClassification(

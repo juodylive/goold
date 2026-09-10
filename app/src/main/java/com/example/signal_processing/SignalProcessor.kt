@@ -3,12 +3,14 @@ package com.example.signal_processing
 import com.example.core.DetectionMode
 import com.example.core.ExpertSettings
 import com.example.core.SensorReading
+import com.example.detection.GoldSilverDetectionAlgorithm
 import com.example.detection.TargetClassifier
 import kotlin.math.abs
 import kotlin.math.max
 
 class SignalProcessor(
-    private val targetClassifier: TargetClassifier = TargetClassifier()
+    private val targetClassifier: TargetClassifier = TargetClassifier(),
+    val goldSilverAlgorithm: GoldSilverDetectionAlgorithm = GoldSilverDetectionAlgorithm()
 ) {
     // Internal Filter States
     private var lastFilteredUt: Float = 48.0f
@@ -131,13 +133,29 @@ class SignalProcessor(
             ((snrFactor * 0.6f + stabFactor * 0.4f) * 100f).coerceIn(20f, 99f)
         } else 0f
 
-        // 12. Classification
+        // 12. Gold & Silver Multi-Stage Discrimination Algorithm
+        val goldSilverAnalysis = goldSilverAlgorithm.analyze(
+            reading = reading,
+            deltaUt = delta,
+            filteredUt = filtered,
+            thresholdUt = effectiveThreshold,
+            snrDb = snrDb,
+            stabilityPct = stabilityPct,
+            mode = currentMode
+        )
+
+        // 13. Classification
         val classification = targetClassifier.classify(
             reading = reading,
             deltaUt = delta,
             thresholdUt = effectiveThreshold,
-            snrDb = snrDb
+            snrDb = snrDb,
+            goldSilverAnalysis = goldSilverAnalysis
         )
+
+        // Suppress audio/vibration triggers if iron notch rejection discarded this target
+        val isEffectiveExceeded = isThresholdExceeded && !goldSilverAnalysis.isIronFilteredOut
+        val effectiveStrength = if (goldSilverAnalysis.isIronFilteredOut) 0f else signalStrengthPct
 
         return ProcessedSignal(
             rawReading = reading,
@@ -145,15 +163,16 @@ class SignalProcessor(
             filteredMagnitudeUt = filtered,
             baselineUt = effectiveBaseline,
             deltaUt = delta,
-            signalStrengthPct = signalStrengthPct,
+            signalStrengthPct = effectiveStrength,
             signalStabilityPct = stabilityPct,
             snrDb = snrDb,
             detectionConfidencePct = confidencePct,
-            isThresholdExceeded = isThresholdExceeded,
+            isThresholdExceeded = isEffectiveExceeded,
             effectiveThresholdUt = effectiveThreshold,
             isPeakDetected = (recentPeakUt > effectiveThreshold && absDelta > (recentPeakUt * 0.85f)),
             peakValueUt = recentPeakUt,
-            classification = classification
+            classification = classification,
+            goldSilverAnalysis = goldSilverAnalysis
         )
     }
 }

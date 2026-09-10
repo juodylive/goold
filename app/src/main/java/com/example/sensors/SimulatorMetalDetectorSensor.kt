@@ -51,7 +51,9 @@ class SimulatorMetalDetectorSensor : MetalDetectorSensor {
         RANDOM_CYCLE,
         FERROUS_NAIL,
         HIGH_CONDUCTIVITY_TARGET,
-        WEAK_ANOMALY
+        WEAK_ANOMALY,
+        GOLD_RING_TARGET,
+        SILVER_COIN_TARGET
     }
 
     override suspend fun startListening(): Boolean {
@@ -83,6 +85,8 @@ class SimulatorMetalDetectorSensor : MetalDetectorSensor {
                         SimulatedTarget.FERROUS_NAIL -> 15f
                         SimulatedTarget.HIGH_CONDUCTIVITY_TARGET -> 82f
                         SimulatedTarget.WEAK_ANOMALY -> 35f
+                        SimulatedTarget.GOLD_RING_TARGET -> 54f
+                        SimulatedTarget.SILVER_COIN_TARGET -> 91f
                         SimulatedTarget.RANDOM_CYCLE -> (20f + (tick.toInt() * 15) % 75).toFloat()
                     }
                 } else null
@@ -91,6 +95,8 @@ class SimulatorMetalDetectorSensor : MetalDetectorSensor {
                     when (simulatedMetalType) {
                         SimulatedTarget.FERROUS_NAIL -> 12f
                         SimulatedTarget.HIGH_CONDUCTIVITY_TARGET -> 78f
+                        SimulatedTarget.GOLD_RING_TARGET -> 52f
+                        SimulatedTarget.SILVER_COIN_TARGET -> 84f
                         else -> 45f
                     }
                 } else null

@@ -32,6 +32,22 @@ enum class DetectionMode(
         defaultThresholdUt = 7.0f,
         sampleRateHz = 50
     ),
+    GOLD_PROSPECTING(
+        title = "Gold Prospecting",
+        description = "Optimized for 45-65 VDI window, gold jewelry, nuggets, and iron notch rejection",
+        isExternalOnly = false,
+        defaultFilterAlpha = 0.22f,
+        defaultThresholdUt = 3.8f,
+        sampleRateHz = 50
+    ),
+    SILVER_COIN_CACHE(
+        title = "Silver & High Conductivity",
+        description = "Optimized for 80-98 VDI high phase conductivity, silver coins, and relics",
+        isExternalOnly = false,
+        defaultFilterAlpha = 0.18f,
+        defaultThresholdUt = 3.2f,
+        sampleRateHz = 50
+    ),
     NON_FERROUS_DETECTION(
         title = "Non-Ferrous Discrimination",
         description = "Phase & conductivity discrimination (requires external hardware coil)",

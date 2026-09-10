@@ -51,6 +51,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.core.AppStrings
 import com.example.core.DetectionMode
 import com.example.ui.components.CircularDetectorMeter
+import com.example.ui.components.GoldSilverSpectrumCard
 import com.example.ui.components.HonestDisclaimerBanner
 import com.example.ui.components.RealtimeDetectorGraph
 import com.example.ui.components.SignalReadoutCards
@@ -174,6 +175,14 @@ fun DetectScreen(
         TargetClassificationBadge(
             classification = processedSignal.classification,
             appLanguage = appLanguage
+        )
+
+        // Gold & Silver Discrimination Algorithm & VDI Spectrum Card
+        GoldSilverSpectrumCard(
+            analysis = processedSignal.goldSilverAnalysis,
+            currentMode = currentMode,
+            appLanguage = appLanguage,
+            onModeSelect = { viewModel.setDetectionMode(it) }
         )
 
         // Real-Time Scrolling Graph

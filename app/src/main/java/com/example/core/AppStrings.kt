@@ -217,6 +217,18 @@ object AppStrings {
     fun classExtNonFerrousSub(lang: String) = resolve(lang, "معدن موصل غير مغناطيسي تم التحقق منه بالملف الخارجي", "Verified non-magnetic conductive target by coil", "Verifiziertes nichtmagnetisches leitfähiges Ziel", "Objetivo conductor no magnético verificado por bobina", "Alvo condutivo não magnético verificado por bobina", "Cible conductrice non magnétique vérifiée par bobine", "Bobin ile doğrulanmış iletken manyetik olmayan hedef")
     fun classExtNonFerrousSub(isAr: Boolean) = resolve(isAr, "معدن موصل غير مغناطيسي تم التحقق منه بالملف الخارجي", "Verified non-magnetic conductive target by coil")
 
+    fun classPhoneGoldTitle(lang: String) = resolve(lang, "مؤشر ذهب محتمل (شذوذ حركي)", "Potential Gold Anomaly (Eddy Current)", "Mögliche Goldanomalie (Wirbelstrom)", "Posible Anomalía de Oro (Foucault)", "Possível Anomalia de Ouro (Foucault)", "Anomalie d'Or Potentielle (Foucault)", "Olası Altın Anomalisi (Girdap Akımı)")
+    fun classPhoneGoldTitle(isAr: Boolean) = resolve(isAr, "مؤشر ذهب محتمل (شذوذ حركي)", "Potential Gold Anomaly (Eddy Current)")
+
+    fun classPhoneGoldSub(lang: String) = resolve(lang, "استجابة حركية غير حديدية عاكسة (اربط ملف بحث لتأكيد VDI)", "Dynamic non-ferrous eddy inflection (Connect search coil for verified VDI)", "Dynamischer Wirbelstrom-Ausschlag (Spule anschließen für VDI)", "Inflexión dinámica no ferrosa (Conecte bobina para VDI)", "Inflexão dinâmica não ferrosa (Conecte bobina para VDI)", "Inflexion dynamique non ferreuse (Connecter bobine pour VDI)", "Dinamik demir dışı girdap tepkisi (VDI için bobin bağlayın)")
+    fun classPhoneGoldSub(isAr: Boolean) = resolve(isAr, "استجابة حركية غير حديدية عاكسة (اربط ملف بحث لتأكيد VDI)", "Dynamic non-ferrous eddy inflection (Connect search coil for verified VDI)")
+
+    fun classPhoneSilverTitle(lang: String) = resolve(lang, "مؤشر فضة محتمل (توصيل فائق)", "Potential Silver Anomaly (High-Conductance)", "Mögliche Silberanomalie (Hochleitfähig)", "Posible Anomalía de Plata (Alta Conductividad)", "Possível Anomalia de Prata (Alta Condutividade)", "Anomalie d'Argent Potentielle (Haute Conductivité)", "Olası Gümüş Anomalisi (Yüksek İletkenlik)")
+    fun classPhoneSilverTitle(isAr: Boolean) = resolve(isAr, "مؤشر فضة محتمل (توصيل فائق)", "Potential Silver Anomaly (High-Conductance)")
+
+    fun classPhoneSilverSub(lang: String) = resolve(lang, "استجابة دايامغناطيسية عالية التوصيل (اربط ملف بحث لتأكيد VDI)", "High-conductance diamagnetic transient (Connect coil for verified VDI)", "Hochleitfähiger diamagnetischer Impuls (Spule anschließen für VDI)", "Transitorio diamagnético de alta conductividad (Conecte bobina para VDI)", "Transitório diamagnético de alta condutividade (Conecte bobina para VDI)", "Transitoire diamagnétique à haute conductivité (Connecter bobine pour VDI)", "Yüksek iletkenlikli diyamanyetik geçiş (Doğrulanmış VDI için bobin bağlayın)")
+    fun classPhoneSilverSub(isAr: Boolean) = resolve(isAr, "استجابة دايامغناطيسية عالية التوصيل (اربط ملف بحث لتأكيد VDI)", "High-conductance diamagnetic transient (Connect coil for verified VDI)")
+
     fun classExtGoldTitle(lang: String) = resolve(lang, "هدف محتمل (نطاق الذهب / النيكل)", "Target Candidate (Gold / Nickel Range)", "Zielkandidat (Gold / Nickel-Bereich)", "Candidato a Objetivo (Rango Oro / Níquel)", "Candidato a Alvo (Faixa Ouro / Níquel)", "Candidat Cible (Gamme Or / Nickel)", "Hedef Adayı (Altın / Nikel Aralığı)")
     fun classExtGoldTitle(isAr: Boolean) = resolve(isAr, "هدف محتمل (نطاق الذهب / النيكل)", "Target Candidate (Gold / Nickel Range)")
 
@@ -240,6 +252,34 @@ object AppStrings {
 
     fun classExtAluminumSub(lang: String) = resolve(lang, "استجابة متوسطة عبر المستشعر الخارجي", "Mid-range phase signature detected via external sensor", "Mittlere Phasensignatur über externen Sensor erkannt", "Firma de fase media detectada por sensor externo", "Assinatura de fase média detectada por sensor externo", "Signature de phase moyenne détectée par capteur externe", "Harici sensörle orta faz imzası tespit edildi")
     fun classExtAluminumSub(isAr: Boolean) = resolve(isAr, "استجابة متوسطة عبر المستشعر الخارجي", "Mid-range phase signature detected via external sensor")
+
+    // Gold & Silver Discrimination Algorithm Strings
+    fun goldSilverAnalysisTitle(lang: String) = resolve(lang, "خوارزمية الكشف عن الذهب والفضة", "Gold & Silver Discrimination Algorithm", "Gold- & Silber-Unterscheidungsalgorithmus", "Algoritmo de Discriminación Oro y Plata", "Algoritmo de Discriminação Ouro e Prata", "Algorithme de Discrimination Or et Argent", "Altın ve Gümüş Ayrım Algoritması")
+    fun goldSilverAnalysisTitle(isAr: Boolean) = resolve(isAr, "خوارزمية الكشف عن الذهب والفضة", "Gold & Silver Discrimination Algorithm")
+
+    fun goldProbability(lang: String) = resolve(lang, "احتمالية الذهب", "Gold Probability", "Gold-Wahrscheinlichkeit", "Probabilidad de Oro", "Probabilidade de Ouro", "Probabilité d'Or", "Altın Olasılığı")
+    fun goldProbability(isAr: Boolean) = resolve(isAr, "احتمالية الذهب", "Gold Probability")
+
+    fun silverProbability(lang: String) = resolve(lang, "احتمالية الفضة", "Silver Probability", "Silber-Wahrscheinlichkeit", "Probabilidad de Plata", "Probabilidade de Prata", "Probabilité d'Argent", "Gümüş Olasılığı")
+    fun silverProbability(isAr: Boolean) = resolve(isAr, "احتمالية الفضة", "Silver Probability")
+
+    fun ironNotchFilter(lang: String) = resolve(lang, "فلتر عزل الحديد", "Iron Notch Filter", "Eisenkerbenfilter", "Filtro de Muesca de Hierro", "Filtro de Rejeição de Ferro", "Filtre Notch Fer", "Demir Çentik Filtresi")
+    fun ironNotchFilter(isAr: Boolean) = resolve(isAr, "فلتر عزل الحديد", "Iron Notch Filter")
+
+    fun ironNotchActive(lang: String) = resolve(lang, "عزل الحديد نشط (رفض الخردة)", "Iron Rejection Active (Notch On)", "Eisenunterdrückung aktiv", "Rechazo de hierro activo", "Rejeição de ferro ativa", "Rejet de fer actif", "Demir reddi aktif")
+    fun ironNotchActive(isAr: Boolean) = resolve(isAr, "عزل الحديد نشط (رفض الخردة)", "Iron Rejection Active (Notch On)")
+
+    fun ironNotchRejected(lang: String) = resolve(lang, "تم حجب إشارة حديدية غير ثمينة تلقائياً", "Ferrous iron anomaly notched out automatically", "Eisenanomalie automatisch ausgefiltert", "Anomalía de hierro filtrada automáticamente", "Anomalia de ferro filtrada automaticamente", "Anomalie de fer filtrée automatiquement", "Demir anomalisi otomatik olarak filtrelendi")
+    fun ironNotchRejected(isAr: Boolean) = resolve(isAr, "تم حجب إشارة حديدية غير ثمينة تلقائياً", "Ferrous iron anomaly notched out automatically")
+
+    fun vdiSpectrum(lang: String) = resolve(lang, "مقياس تمييز المعادن VDI (0-100)", "VDI Target ID Spectrum (0-100)", "VDI-Leitfähigkeitsspektrum (0-100)", "Espectro ID Objetivo VDI (0-100)", "Espectro ID Alvo VDI (0-100)", "Spectre d'Identification VDI (0-100)", "VDI Hedef Kimlik Spektrumu (0-100)")
+    fun vdiSpectrum(isAr: Boolean) = resolve(isAr, "مقياس تمييز المعادن VDI (0-100)", "VDI Target ID Spectrum (0-100)")
+
+    fun goldWindowLabel(lang: String) = resolve(lang, "نطاق الذهب (VDI 45-65)", "Gold Window (VDI 45-65)", "Gold-Fenster (VDI 45-65)", "Ventana Oro (VDI 45-65)", "Janela Ouro (VDI 45-65)", "Fenêtre Or (VDI 45-65)", "Altın Aralığı (VDI 45-65)")
+    fun goldWindowLabel(isAr: Boolean) = resolve(isAr, "نطاق الذهب (VDI 45-65)", "Gold Window (VDI 45-65)")
+
+    fun silverWindowLabel(lang: String) = resolve(lang, "نطاق الفضة (VDI 80-98)", "Silver Window (VDI 80-98)", "Silber-Fenster (VDI 80-98)", "Ventana Plata (VDI 80-98)", "Janela Prata (VDI 80-98)", "Fenêtre Argent (VDI 80-98)", "Gümüş Aralığı (VDI 80-98)")
+    fun silverWindowLabel(isAr: Boolean) = resolve(isAr, "نطاق الفضة (VDI 80-98)", "Silver Window (VDI 80-98)")
 
     // Graph
     fun oscillogram(lang: String) = resolve(lang, "مخطط التذبذب (µT)", "OSCILLOGRAM (µT)", "OSZILLOGRAMM (µT)", "OSCILOGRAMA (µT)", "OSCILOGRAMA (µT)", "OSCILLOGRAMME (µT)", "OSİLOGRAM (µT)")
@@ -522,6 +562,8 @@ object AppStrings {
             DetectionMode.QUICK_SCAN -> resolve(lang, "مسح سريع", "Quick Scan", "Schnellscan", "Escaneo Rápido", "Varredura Rápida", "Balayage Rapide", "Hızlı Tarama")
             DetectionMode.DEEP_ANALYSIS -> resolve(lang, "تحليل عميق للإشارة", "Deep Signal Analysis", "Tiefensignalanalyse", "Análisis Profundo", "Análise Profunda", "Analyse Approfondie", "Derin Sinyal Analizi")
             DetectionMode.FERROUS_DETECTION -> resolve(lang, "التركيز على المعادن الحديدية", "Ferrous Metal Focus", "Eisenmetall-Fokus", "Enfoque Ferroso", "Foco Ferroso", "Focus Métaux Ferreux", "Demir Metal Odaklı")
+            DetectionMode.GOLD_PROSPECTING -> resolve(lang, "كشف الذهب والمجوهرات", "Gold Prospecting", "Goldsuchmodus", "Prospección de Oro", "Prospecção de Ouro", "Prospection d'Or", "Altın Arama Modu")
+            DetectionMode.SILVER_COIN_CACHE -> resolve(lang, "كشف الفضة والعملات", "Silver & High-Conductivity Coins", "Silber & Hochleitfähige Münzen", "Plata y Monedas de Alta Conductividad", "Prata e Moedas de Alta Condutividade", "Argent et Pièces Haute Conductivité", "Gümüş ve Yüksek İletkenlikli Paralar")
             DetectionMode.NON_FERROUS_DETECTION -> resolve(lang, "تمييز المعادن غير الحديدية", "Non-Ferrous Discrimination", "NE-Metall-Diskriminierung", "Discriminación No Ferrosa", "Discriminação Não Ferrosa", "Discrimination Non Ferreuse", "Demir Dışı Ayrımı")
             DetectionMode.EXTERNAL_SENSOR_MODE -> resolve(lang, "وضع الأجهزة الخارجية", "External Hardware Mode", "Externer Hardwaremodus", "Modo Hardware Externo", "Modo Hardware Externo", "Mode Matériel Externe", "Harici Donanım Modu")
             DetectionMode.EXPERT_MANUAL -> resolve(lang, "الوضع الاحترافي / اليدوي", "Expert / Manual Mode", "Experten- / Manuellmodus", "Modo Experto / Manual", "Modo Especialista / Manual", "Mode Expert / Manuel", "Uzman / Manuel Mod")
@@ -560,6 +602,26 @@ object AppStrings {
                 "Otimizado para ferro, aço, canos e alvos ferrosos",
                 "Optimisé pour le fer, l'acier, les tuyaux et cibles ferreuses",
                 "Demir, çelik, borular ve manyetik hedefler için optimize edilmiştir"
+            )
+            DetectionMode.GOLD_PROSPECTING -> resolve(
+                lang,
+                "خوارزمية مخصصة لنطاق VDI 45-65 وشذوذ تيارات إيدي الحركية مع عزل الحديد",
+                "Tuned for 45-65 VDI gold window, eddy-current transient response, and iron notch rejection",
+                "Optimiert für das 45-65 VDI Goldfenster, Wirbelstrom-Dynamik und Eisenkerbenfilter",
+                "Ajustado para ventana VDI 45-65 de oro, respuesta de corrientes de Foucault y filtro de hierro",
+                "Ajustado para janela VDI 45-65 de ouro, resposta de correntes parasitas e filtro de ferro",
+                "Calibré pour la fenêtre d'or VDI 45-65, réponse aux courants de Foucault et rejet du fer",
+                "45-65 VDI altın aralığı, girdap akımı dinamik yanıtı ve demir çentik filtresi için optimize edilmiştir"
+            )
+            DetectionMode.SILVER_COIN_CACHE -> resolve(
+                lang,
+                "خوارزمية مخصصة للأهداف عالية التوصيل VDI 80-98 وتأخير الطور للأجسام الفضية",
+                "Tuned for 80-98 VDI high-phase delay, diamagnetic response, and deep silver coin detection",
+                "Optimiert für 80-98 VDI Hochphasenverzögerung, diamagnetische Reaktion und Silbermünzsuche",
+                "Ajustado para retardo de fase alta VDI 80-98, respuesta diamagnética y monedas de plata",
+                "Ajustado para atraso de fase alta VDI 80-98, resposta diamagnética e moedas de prata",
+                "Calibré pour le retard de phase élevé VDI 80-98, réponse diamagnétique et pièces d'argent",
+                "80-98 VDI yüksek faz gecikmesi, diyamanyetik yanıt ve derin gümüş para tespiti için optimize edilmiştir"
             )
             DetectionMode.NON_FERROUS_DETECTION -> resolve(
                 lang,

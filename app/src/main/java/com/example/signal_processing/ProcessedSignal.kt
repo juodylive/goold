@@ -2,6 +2,7 @@ package com.example.signal_processing
 
 import com.example.core.SensorReading
 import com.example.core.TargetClassification
+import com.example.detection.GoldSilverAnalysisResult
 
 data class ProcessedSignal(
     val rawReading: SensorReading,
@@ -17,5 +18,6 @@ data class ProcessedSignal(
     val effectiveThresholdUt: Float,
     val isPeakDetected: Boolean,
     val peakValueUt: Float,
-    val classification: TargetClassification
+    val classification: TargetClassification,
+    val goldSilverAnalysis: GoldSilverAnalysisResult? = null
 )
